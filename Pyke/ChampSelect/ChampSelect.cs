@@ -116,5 +116,9 @@ namespace Pyke.ChampSelect
         public async Task<List<SummonerSlot>> GetEnemyRosterAsync() => (await GetRosterAsync())?.Where(t => !t.IsOnPlayersTeam).ToList();
 
         public List<SummonerSlot> GetEnemyRoster() => GetEnemyRosterAsync().GetAwaiter().GetResult();
+
+        public async Task<PickableSkins> GetPickableSkinIdsAsync() => await leagueAPI.RequestHandler.StandardGet<PickableSkins>("/lol-champ-select/v1/pickable-skins");
+
+        public PickableSkins GetPickableSkinIds() => GetPickableSkinIdsAsync().GetAwaiter().GetResult();
     }
 }

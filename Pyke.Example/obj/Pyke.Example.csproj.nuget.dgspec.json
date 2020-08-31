@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke.Example\\Pyke.Example.csproj": {}
+    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke.Example\\Pyke.Example.csproj": {
+    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
+        "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
         "projectName": "Pyke.Example",
-        "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
+        "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
         "packagesPath": "C:\\Users\\Erik\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke.Example\\obj\\",
+        "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Microsoft\\Xamarin\\NuGet\\"
@@ -31,8 +31,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.csproj": {
-                "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.csproj"
+              "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj": {
+                "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj"
               }
             }
           }
@@ -88,14 +88,14 @@
         }
       }
     },
-    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.csproj": {
+    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.csproj",
+        "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj",
         "projectName": "Pyke",
-        "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.csproj",
+        "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj",
         "packagesPath": "C:\\Users\\Erik\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\obj\\",
+        "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Microsoft\\Xamarin\\NuGet\\"

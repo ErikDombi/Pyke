@@ -16,22 +16,15 @@ namespace Pyke.Example
         static void Main(string[] args)
         {
             API = new LeagueAPI().ConnectAsync().GetAwaiter().GetResult();
-            API.Events.SubscribeAllEvents();
-            API.Events.OnSessionUpdated += Events_OnSessionUpdated;
+
+            API.Events.SubscribeEvent(EventType.GameflowStateChanged);
             API.Events.GameflowStateChanged += Events_GameflowStateChanged;
             Console.ReadLine();
         }
 
         private static void Events_GameflowStateChanged(object sender, State e)
         {
-            Console.WriteLine(e.ToString());
-        }
-
-        private static void Events_OnSessionUpdated(object sender, ChampSelect.Models.Session e)
-        {
-            Console.Clear();
-            Console.WriteLine(string.Join(", ", API.ChampSelect.GetFriendlyRoster()?.Select(t => t.ChampionName)));
-            Console.WriteLine(string.Join(", ", API.ChampSelect.GetEnemyRoster()?.Select(t => t.ChampionName)));
+            Console.WriteLine("State Changed: " + e.ToString());
         }
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hhXerREykysG+EgKSW8yzuzLWrVjKAa7Va//EqxwC50ZcdeNGVKnvZhH37Zx5eM4nLEQGKcL+zattfT/eJqTjQ==",
+  "dgSpecHash": "oT2EZhC1O8wbLBomlms53Vfy+TNiTYvq6zuQSqCypU5VSj5USM3XV6DYbHyAMEQNWxIjY2SB3+kwUD8Ue2/Cdw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.csproj",
+  "projectFilePath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Erik\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Erik\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",

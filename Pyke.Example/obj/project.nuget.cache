@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OYe6eyvAOU5lHad/bE69uz3oMI2piQ3Su3z2LbmUgfKAb7rXBPYbuPZvJSki0cjZwc5fBtodHAdrFhgwIGxmiA==",
+  "dgSpecHash": "1S7Uvr6jDFm7gX8IqRzQajL89s5SZWXjyI7Co9zCL5koBWnzB0sHbtoiBcAyoQzweO4gvuZ6aLY3Nl3tK72dZg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
+  "projectFilePath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Erik\\.nuget\\packages\\camille.enums\\3.0.0-nightly-2020-08-27-1543d8fc57\\camille.enums.3.0.0-nightly-2020-08-27-1543d8fc57.nupkg.sha512",
     "C:\\Users\\Erik\\.nuget\\packages\\camille.lcu\\3.0.0-nightly-2020-08-27-1543d8fc57\\camille.lcu.3.0.0-nightly-2020-08-27-1543d8fc57.nupkg.sha512",

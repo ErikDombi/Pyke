@@ -3635,11 +3635,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.csproj",
+      "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj",
       "projectName": "Pyke",
-      "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.csproj",
+      "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj",
       "packagesPath": "C:\\Users\\Erik\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\obj\\",
+      "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Microsoft\\Xamarin\\NuGet\\"

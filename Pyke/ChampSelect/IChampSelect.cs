@@ -7,80 +7,76 @@ using System.Threading.Tasks;
 
 namespace Pyke.ChampSelect
 {
-    public interface IChampSelect
+     interface IChampSelect
     {
-        public Task<List<Champion>> GetChampionsAsync();
+         Task<List<Champion>> GetChampionsAsync();
 
-        public List<Champion> GetChampions();
+         List<Champion> GetChampions();
 
-        public Task<List<Champion>> GetPickableChampionsAsync();
+         Task<List<Champion>> GetPickableChampionsAsync();
 
-        public Task<List<Champ>> GetBannableChampionsAsync();
+         Task<List<Champ>> GetBannableChampionsAsync();
 
-        public List<Champ> GetBannableChampions();
+         List<Champ> GetBannableChampions();
 
-        public Task<Session> GetSessionAsync();
+         Task<Session> GetSessionAsync();
 
-        public Session GetSession();
+         Session GetSession();
 
-        public Task SetSessionActionAsync(int id, Models.Action action);
+         Task SetSessionActionAsync(int id, Models.Action action);
 
-        public void SetSessionAction(int id, Models.Action action);
+         void SetSessionAction(int id, Models.Action action);
 
-        public Task SelectChampionAsync(string ChampionName, bool LockIn);
+         Task SelectChampionAsync(string ChampionName, bool LockIn);
 
-        public void SelectChampion(string ChampionName, bool LockIn);
+         void SelectChampion(string ChampionName, bool LockIn);
 
-        public Task SelectChampionAsync(long ChampionId, bool LockIn);
+         Task SelectChampionAsync(long ChampionId, bool LockIn);
 
-        public void SelectChampion(long ChampionId, bool LockIn);
+         void SelectChampion(long ChampionId, bool LockIn);
 
-        public Task<List<Trade>> GetTradesAsync();
+         Task<List<Trade>> GetTradesAsync();
 
-        public List<Trade> GetTrades();
+         List<Trade> GetTrades();
 
-        public Task<Trade> GetTradeByIdAsync(int id);
+         Task<Trade> GetTradeByIdAsync(int id);
 
-        public Trade GetTradeById(int id);
+         Trade GetTradeById(int id);
 
-        public Task AcceptTradeAsync(int id);
+         Task AcceptTradeAsync(int id);
 
-        public void AcceptTrade(int id);
+         void AcceptTrade(int id);
 
-        public Task DeclineTradeAsync(int id);
+         Task DeclineTradeAsync(int id);
 
-        public void DeclineTrade(int id);
+         void DeclineTrade(int id);
 
-        public Task RequestTradeAsync(int id);
+         Task RequestTradeAsync(int id);
 
-        public void RequestTrade(int id);
+         void RequestTrade(int id);
 
-        public Task CancelTradeAsync(int id);
+         Task CancelTradeAsync(int id);
 
-        public void CancelTrade(int id);
+         void CancelTrade(int id);
 
-        public Task<SummonerSlot> GetSummonerByCellIdAsync(int id);
+         Task<SummonerSlot> GetSummonerByCellIdAsync(int id);
 
-        public SummonerSlot GetSummonerByCellId(int id);
+         SummonerSlot GetSummonerByCellId(int id);
 
-        public async Task<List<SummonerSlot>> GetRosterAsync()
-        {
-            List<SummonerSlot> allSummoners = new List<SummonerSlot>();
-            Session session = await GetSessionAsync();
-            int gameSize = session.MyTeam.Count + session.TheirTeam.Count;
-            for (int i = 0; i < gameSize; i++)
-                allSummoners.Add(await GetSummonerByCellIdAsync(i));
-            return allSummoners;
-        }
+        Task<List<SummonerSlot>> GetRosterAsync();
 
-        public List<SummonerSlot> GetRoster();
+        List<SummonerSlot> GetRoster();
 
-        public Task<List<SummonerSlot>> GetFriendlyRosterAsync();
+        Task<List<SummonerSlot>> GetFriendlyRosterAsync();
 
-        public List<SummonerSlot> GetFriendlyRoster();
+        List<SummonerSlot> GetFriendlyRoster();
 
-        public Task<List<SummonerSlot>> GetEnemyRosterAsync();
+        Task<List<SummonerSlot>> GetEnemyRosterAsync();
 
-        public List<SummonerSlot> GetEnemyRoster();
+        List<SummonerSlot> GetEnemyRoster();
+
+        Task<PickableSkins> GetPickableSkinIdsAsync();
+
+        PickableSkins GetPickableSkinIds() => GetPickableSkinIdsAsync().GetAwaiter().GetResult();
     }
 }
