@@ -12,6 +12,7 @@ namespace Pyke.Networking.Http
     /// <inheritdoc cref="ILeagueRequestHandler" />
     internal class LeagueRequestHandler : RequestHandler, ILeagueRequestHandler
     {
+#pragma warning disable CS0169
         private LeagueAPI leagueAPI;
 
         /// <inheritdoc />
