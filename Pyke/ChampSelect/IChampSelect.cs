@@ -7,61 +7,103 @@ using System.Threading.Tasks;
 
 namespace Pyke.ChampSelect
 {
-     interface IChampSelect
+    public interface IChampSelect
     {
-         Task<List<Champion>> GetChampionsAsync();
+        /// <summary>
+        /// Get a list of all champions in Champ Select
+        /// Endpoint: /lol-champ-select/v1/all-grid-champions
+        /// </summary>
+        /// <returns><see cref="List{Champion}"/></returns>
+        Task<List<Champion>> GetChampionsAsync();
 
-         List<Champion> GetChampions();
+        /// <summary>
+        /// Get a list of all champions in Champ Select
+        /// Endpoint: /lol-champ-select/v1/all-grid-champions
+        /// </summary>
+        /// <returns><see cref="List{Champion}"/></returns>
+        List<Champion> GetChampions();
 
-         Task<List<Champion>> GetPickableChampionsAsync();
+        /// <summary>
+        /// Get a list of all pickable champions in Champ Select
+        /// Endpoint: /lol-champ-select/v1/pickable-champion-ids
+        /// </summary>
+        /// <returns><see cref="List{Champion}"/></returns>
+        Task<List<Champion>> GetPickableChampionsAsync();
+        // TODO: Rewrite to use /lol-champ-select/v1/pickable-champion-ids
 
-         Task<List<Champ>> GetBannableChampionsAsync();
+        /// <summary>
+        /// Get a list of all pickable champions in Champ Select
+        /// </summary>
+        /// <returns><see cref="List{Champion}"/></returns>
+        List<Champion> GetPickableChampions();
 
-         List<Champ> GetBannableChampions();
+        /// <summary>
+        /// Get a list of all bannable champions in Champ Select
+        /// Endpoint: /lol-champ-select/v1/bannable-champion-ids
+        /// </summary>
+        /// <returns><see cref="List{Champ}"/></returns>
+        Task<List<Champ>> GetBannableChampionsAsync();
 
-         Task<Session> GetSessionAsync();
+        /// <summary>
+        /// Get a list of all bannable champions in Champ Select
+        /// Endpoint: /lol-champ-select/v1/bannable-champion-ids
+        /// </summary>
+        /// <returns><see cref="List{Champ}"/></returns>
+        List<Champ> GetBannableChampions();
 
-         Session GetSession();
+        /// <summary>
+        /// Returns the current champion select session
+        /// Endpoint: /lol-champ-select/v1/session
+        /// </summary>
+        /// <returns><see cref="Session"/></returns>
+        Task<Session> GetSessionAsync();
 
-         Task SetSessionActionAsync(int id, Models.Action action);
+        /// <summary>
+        /// Returns the current champion select session
+        /// Endpoint: /lol-champ-select/v1/session
+        /// </summary>
+        /// <returns><see cref="Session"/></returns>
+        Session GetSession();
 
-         void SetSessionAction(int id, Models.Action action);
+        Task SetSessionActionAsync(int id, Models.Action action);
 
-         Task SelectChampionAsync(string ChampionName, bool LockIn);
+        void SetSessionAction(int id, Models.Action action);
 
-         void SelectChampion(string ChampionName, bool LockIn);
+        Task SelectChampionAsync(string ChampionName, bool LockIn);
 
-         Task SelectChampionAsync(long ChampionId, bool LockIn);
+        void SelectChampion(string ChampionName, bool LockIn);
 
-         void SelectChampion(long ChampionId, bool LockIn);
+        Task SelectChampionAsync(long ChampionId, bool LockIn);
 
-         Task<List<Trade>> GetTradesAsync();
+        void SelectChampion(long ChampionId, bool LockIn);
 
-         List<Trade> GetTrades();
+        Task<List<Trade>> GetTradesAsync();
 
-         Task<Trade> GetTradeByIdAsync(int id);
+        List<Trade> GetTrades();
 
-         Trade GetTradeById(int id);
+        Task<Trade> GetTradeByIdAsync(int id);
 
-         Task AcceptTradeAsync(int id);
+        Trade GetTradeById(int id);
 
-         void AcceptTrade(int id);
+        Task AcceptTradeAsync(int id);
 
-         Task DeclineTradeAsync(int id);
+        void AcceptTrade(int id);
 
-         void DeclineTrade(int id);
+        Task DeclineTradeAsync(int id);
 
-         Task RequestTradeAsync(int id);
+        void DeclineTrade(int id);
 
-         void RequestTrade(int id);
+        Task RequestTradeAsync(int id);
 
-         Task CancelTradeAsync(int id);
+        void RequestTrade(int id);
 
-         void CancelTrade(int id);
+        Task CancelTradeAsync(int id);
 
-         Task<SummonerSlot> GetSummonerByCellIdAsync(int id);
+        void CancelTrade(int id);
 
-         SummonerSlot GetSummonerByCellId(int id);
+        Task<SummonerSlot> GetSummonerByCellIdAsync(int id);
+
+        SummonerSlot GetSummonerByCellId(int id);
 
         Task<List<SummonerSlot>> GetRosterAsync();
 
@@ -78,5 +120,13 @@ namespace Pyke.ChampSelect
         Task<PickableSkins> GetPickableSkinIdsAsync();
 
         PickableSkins GetPickableSkinIds() => GetPickableSkinIdsAsync().GetAwaiter().GetResult();
+
+        Task UpdateSelectionAsync(Selection selection);
+
+        void UpdateSelection(Selection selection);
+
+        Task SelectSummonerSpellsAsync(Spell Left, Spell Right);
+
+        void SelectSummonerSpells(Spell Left, Spell Right);
     }
 }

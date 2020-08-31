@@ -20,6 +20,8 @@ namespace Pyke.Example
             API.Events.SubscribeEvent(EventType.GameflowStateChanged);
             API.Events.GameflowStateChanged += Events_GameflowStateChanged;
             Console.ReadLine();
+            API.ChampSelect.SelectSummonerSpells(ChampSelect.Models.Spell.Cleanse, ChampSelect.Models.Spell.Teleport);
+            Console.ReadLine();
         }
 
         private static void Events_GameflowStateChanged(object sender, State e)

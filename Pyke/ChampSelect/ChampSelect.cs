@@ -27,6 +27,8 @@ namespace Pyke.ChampSelect
 
         public async Task<List<Champion>> GetPickableChampionsAsync() => (await GetChampionsAsync()).Where(t => (t.owned || t.freeToPlay) && !t.disabled && !t.selectionStatus.pickedByOtherOrBanned).ToList();
 
+        public List<Champion> GetPickableChampions() => GetPickableChampionsAsync().GetAwaiter().GetResult();
+
         public async Task<List<Champ>> GetBannableChampionsAsync() {
             var response = await leagueAPI.RequestHandler.HttpRequest<List<long>>(HttpMethod.Get, "/lol-champ-select/v1/bannable-champion-ids", null);
             if (response.didFail) return null;
@@ -39,7 +41,7 @@ namespace Pyke.ChampSelect
         public Session GetSession() => GetSessionAsync().GetAwaiter().GetResult();
 
         public async Task SetSessionActionAsync(int id, Models.Action action) => await leagueAPI.RequestHandler.GetJsonResponseAsync(
-                httpMethod: new HttpMethod("Patch"),
+                httpMethod: HttpMethod.Patch,
                 relativeUrl: $"/lol-champ-select/v1/session/actions/{id}",
                 queryParameters: null,
                 body: action
@@ -120,5 +122,21 @@ namespace Pyke.ChampSelect
         public async Task<PickableSkins> GetPickableSkinIdsAsync() => await leagueAPI.RequestHandler.StandardGet<PickableSkins>("/lol-champ-select/v1/pickable-skins");
 
         public PickableSkins GetPickableSkinIds() => GetPickableSkinIdsAsync().GetAwaiter().GetResult();
+
+        public async Task UpdateSelectionAsync(Selection selection) => await leagueAPI.RequestHandler.HttpRequest<Selection, object>(HttpMethod.Patch, "/lol-champ-select/v1/session/my-selection", null, selection);
+
+        public void UpdateSelection(Selection selection) => UpdateSelectionAsync(selection).GetAwaiter().GetResult();
+
+        public async Task SelectSummonerSpellsAsync(Spell Left, Spell Right)
+        {
+            Selection selection = new Selection()
+            {
+                spell1Id = (ulong)Left,
+                spell2Id = (ulong)Right
+            };
+            await UpdateSelectionAsync(selection);
+        }
+
+        public void SelectSummonerSpells(Spell Left, Spell Right) => SelectSummonerSpellsAsync(Left, Right).GetAwaiter().GetResult();
     }
 }

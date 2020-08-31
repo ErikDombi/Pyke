@@ -93,6 +93,9 @@ namespace Pyke.Networking.Http
         /// <inheritdoc />
         public async Task<RequestResponse<TResponse>> HttpRequest<TResponse>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters) => await HttpRequest<object, TResponse>(httpMethod, relativeUrl, queryParameters, null);
 
+        public async Task<RequestResponse<object>> HttpRequest(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters) => await HttpRequest<object, object>(httpMethod, relativeUrl, queryParameters, null);
+        public async Task<RequestResponse<object>> HttpRequest<TBody>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TBody body) => await HttpRequest<object, object>(httpMethod, relativeUrl, queryParameters, body);
+
         public async Task<TResponse> StandardGet<TResponse>(string url)
         {
             var response = await HttpRequest<TResponse>(HttpMethod.Get, url, null);
