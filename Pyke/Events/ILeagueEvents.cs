@@ -14,10 +14,9 @@ namespace Pyke.Events
 
         public event EventHandler<Champ> SelectedChampionChanged;
 
-        // TODO: This event fires anything changes with Champion Trades. Even if one becomes available. Either make name more accurate, or change the way it works.
         public event EventHandler<List<Trade>> ChampionTradesUpdated;
 
-        public event EventHandler<Session> OnChampSelectTurnToPick;
+        event EventHandler<PickType> OnChampSelectTurnToPick;
 
         /// <summary>
         /// Is invoked when any changes occur during champ select. You should update all champ select data when this is invoked.
