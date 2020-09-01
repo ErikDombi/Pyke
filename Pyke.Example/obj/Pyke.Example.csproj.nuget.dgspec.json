@@ -1,32 +1,38 @@
 {
   "format": 1,
   "restore": {
-    "/Users/erikdombi/Projects/Pyke/Pyke.Example/Pyke.Example.csproj": {}
+    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj": {}
   },
   "projects": {
-    "/Users/erikdombi/Projects/Pyke/Pyke.Example/Pyke.Example.csproj": {
+    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/erikdombi/Projects/Pyke/Pyke.Example/Pyke.Example.csproj",
+        "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
         "projectName": "Pyke.Example",
-        "projectPath": "/Users/erikdombi/Projects/Pyke/Pyke.Example/Pyke.Example.csproj",
-        "packagesPath": "/Users/erikdombi/.nuget/packages/",
-        "outputPath": "/Users/erikdombi/Projects/Pyke/Pyke.Example/obj/",
+        "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
+        "packagesPath": "C:\\Users\\Erik\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "/Users/erikdombi/.config/NuGet/NuGet.Config"
+          "C:\\Users\\Erik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "/Users/erikdombi/Projects/Pyke/Pyke/Pyke.csproj": {
-                "projectPath": "/Users/erikdombi/Projects/Pyke/Pyke/Pyke.csproj"
+              "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj": {
+                "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj"
               }
             }
           }
@@ -67,31 +73,43 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.2, 3.1.2]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.301/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/erikdombi/Projects/Pyke/Pyke/Pyke.csproj": {
-      "version": "1.0.0",
+    "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj": {
+      "version": "0.1.0",
       "restore": {
-        "projectUniqueName": "/Users/erikdombi/Projects/Pyke/Pyke/Pyke.csproj",
+        "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj",
         "projectName": "Pyke",
-        "projectPath": "/Users/erikdombi/Projects/Pyke/Pyke/Pyke.csproj",
-        "packagesPath": "/Users/erikdombi/.nuget/packages/",
-        "outputPath": "/Users/erikdombi/Projects/Pyke/Pyke/obj/",
+        "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj",
+        "packagesPath": "C:\\Users\\Erik\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "/Users/erikdombi/.config/NuGet/NuGet.Config"
+          "C:\\Users\\Erik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -136,7 +154,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.301/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
         }
       }
     }

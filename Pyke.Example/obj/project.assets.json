@@ -2389,7 +2389,7 @@
           "lib/netstandard2.0/websocket-sharp-core.dll": {}
         }
       },
-      "Pyke/1.0.0": {
+      "Pyke/0.1.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
@@ -7604,7 +7604,7 @@
         "websocketsharp.core.nuspec"
       ]
     },
-    "Pyke/1.0.0": {
+    "Pyke/0.1.0": {
       "type": "project",
       "path": "../Pyke/Pyke.csproj",
       "msbuildProject": "../Pyke/Pyke.csproj"
@@ -7615,36 +7615,43 @@
       "Camille.Lcu >= 3.0.0-nightly-2020-08-27-1543d8fc57",
       "LcuConnector >= 1.0.0",
       "MingweiSamuel.Camille >= 2.6.2",
-      "Pyke >= 1.0.0",
+      "Pyke >= 0.1.0",
       "WebSocketSharp >= 1.0.3-rc11"
     ]
   },
   "packageFolders": {
-    "/Users/erikdombi/.nuget/packages/": {}
+    "C:\\Users\\Erik\\.nuget\\packages\\": {},
+    "D:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/erikdombi/Projects/Pyke/Pyke.Example/Pyke.Example.csproj",
+      "projectUniqueName": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
       "projectName": "Pyke.Example",
-      "projectPath": "/Users/erikdombi/Projects/Pyke/Pyke.Example/Pyke.Example.csproj",
-      "packagesPath": "/Users/erikdombi/.nuget/packages/",
-      "outputPath": "/Users/erikdombi/Projects/Pyke/Pyke.Example/obj/",
+      "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\Pyke.Example.csproj",
+      "packagesPath": "C:\\Users\\Erik\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke.Example\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "D:\\Microsoft\\Xamarin\\NuGet\\"
+      ],
       "configFilePaths": [
-        "/Users/erikdombi/.config/NuGet/NuGet.Config"
+        "C:\\Users\\Erik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "/Users/erikdombi/Projects/Pyke/Pyke/Pyke.csproj": {
-              "projectPath": "/Users/erikdombi/Projects/Pyke/Pyke/Pyke.csproj"
+            "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj": {
+              "projectPath": "C:\\Users\\Erik\\source\\repos\\Pyke\\Pyke\\Pyke\\Pyke.csproj"
             }
           }
         }
@@ -7685,12 +7692,18 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[3.1.2, 3.1.2]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.301/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
       }
     }
   },
