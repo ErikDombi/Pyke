@@ -46,8 +46,8 @@ namespace Pyke.ChampSelect.Models
         [JsonProperty("championId")]
         public long ChampionId;
 
-        [JsonProperty("championPicklongent")]
-        public long ChampionPicklongent;
+        [JsonProperty("championPickIntent")]
+        public long ChampionPickIntent;
 
         [JsonProperty("entitledFeatureType")]
         public string EntitledFeatureType;
@@ -152,7 +152,7 @@ namespace Pyke.ChampSelect.Models
         public EntitledFeatureState EntitledFeatureState;
 
         [JsonProperty("gameId")]
-        public int GameId;
+        public ulong GameId;
 
         [JsonProperty("hasSimultaneousBans")]
         public bool HasSimultaneousBans;

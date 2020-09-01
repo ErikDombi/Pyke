@@ -12,6 +12,7 @@ namespace Pyke.Events
         public event EventHandler<ReadyState> MatchFoundStatusChanged;
         public event EventHandler<Champ> SelectedChampionChanged;
         public event EventHandler<List<Trade>> ChampionTradeRecieved;
+        public event EventHandler<Session> OnChampSelectTurnToPick;
         /// <summary>
         /// Is invoked when any changes occur during champ select. You should update all champ select data when this is invoked.
         /// </summary>
@@ -31,7 +32,8 @@ namespace Pyke.Events
             MatchFoundStatusChanged,
             SelectedChampionChanged,
             ChampionTradeRecieved,
-            OnSessionUpdated
+            OnSessionUpdated,
+            OnChampSelectTurn
         }
     }
 }

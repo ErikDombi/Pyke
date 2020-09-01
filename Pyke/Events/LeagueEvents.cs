@@ -28,6 +28,7 @@ namespace Pyke.Events
         public event EventHandler<List<Trade>> ChampionTradeRecieved;
         /// <inheritdoc/>
         public event EventHandler<Session> OnSessionUpdated;
+        public event EventHandler<Session> OnChampSelectTurnToPick;
 
         public LeagueEvents(LeagueAPI leagueAPI)
         {
@@ -88,7 +89,15 @@ namespace Pyke.Events
             {
                 try
                 {
-                    OnSessionUpdated?.Invoke(s, JsonConvert.DeserializeObject<Session>(e.Data.ToString()));
+                    var session = JsonConvert.DeserializeObject<Session>(e.Data.ToString());
+                    OnSessionUpdated?.Invoke(s, session);
+                    var SummonerId = leagueAPI.Login.GetSession().SummonerId;
+                    var ActorCellId = session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId).CellId;
+                    var Action = session.Actions[0].FirstOrDefault(t => t.ActorCellId == ActorCellId);
+                    if(Action.IsInProgress && Action.Type == "pick")
+                    {
+                        OnChampSelectTurnToPick?.Invoke(s, session);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -119,6 +128,7 @@ namespace Pyke.Events
                 case EventType.ChampionTradeRecieved:
                     leagueAPI.EventHandler.Subscribe("/lol-champ-select/v1/session/trades", _ChampionTradeRecieved);
                     break;
+                case EventType.OnChampSelectTurn:
                 case EventType.OnSessionUpdated:
                     leagueAPI.EventHandler.Subscribe("/lol-champ-select/v1/session", _OnSessionUpdated);
                     break;
@@ -146,6 +156,7 @@ namespace Pyke.Events
                     leagueAPI.EventHandler.Unsubscribe("/lol-champ/select/v1/session/trades");
                     break;
                 case EventType.OnSessionUpdated:
+                case EventType.OnChampSelectTurn:
                     leagueAPI.EventHandler.Unsubscribe("/lol-champ-select/v1/session");
                     break;
             }

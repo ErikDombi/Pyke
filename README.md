@@ -29,5 +29,7 @@ This example shows how to hook GameglowState Changes, which we can use to detect
  
  ## Libraries Used
  Pyke was made possible using the following libraries
- LCU-Sharp
- Json.NET
+  - LCU-Sharp
+  - Json.NET
+
+  
