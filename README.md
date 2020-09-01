@@ -1,6 +1,6 @@
 ![Pyke](Resources/Pyke.png)
 
-[![Pyke](https://img.shields.io/github/workflow/status/wickedlizerd/Pyke/.NET%20Core?color=blue&label=Latest%20Build&logo=.NET&style=flat-square)](https://github.com/wickedlizerd/Pyke/actions?query=workflow%3A%22.NET+Core%22)[![Nuget](https://img.shields.io/nuget/v/pyke?color=blue&label=Nuget&logo=Nuget&logoColor=white&style=flat-square)](https://www.nuget.org/packages/Pyke/)[![Nuget Prerelease](https://img.shields.io/nuget/vpre/pyke?color=green&label=Nuget%20Pre-Release&logo=nuget&logoColor=white&style=flat-square)](https://www.nuget.org/packages/Pyke/)
+[![Pyke](https://img.shields.io/github/workflow/status/wickedlizerd/Pyke/.NET%20Core?color=blue&label=Latest%20Build&logo=.NET&style=flat-square)](https://github.com/wickedlizerd/Pyke/actions?query=workflow%3A%22.NET+Core%22) [![Nuget](https://img.shields.io/nuget/v/pyke?color=blue&label=Nuget&logo=Nuget&logoColor=white&style=flat-square)](https://www.nuget.org/packages/Pyke/) [![Nuget Prerelease](https://img.shields.io/nuget/vpre/pyke?color=green&label=Nuget%20Pre-Release&logo=nuget&logoColor=white&style=flat-square)](https://www.nuget.org/packages/Pyke/)
 
 A C# Library for interacting with the League of Legends Client LCU.
 
