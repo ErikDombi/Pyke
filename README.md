@@ -8,10 +8,10 @@ A C# Library for interacting with the League of Legends Client LCU.
 ## Installation
 
 ### Nuget
-Download from ![Nuget](https://www.nuget.org/packages/Pyke/)
+Download from [Nuget](https://www.nuget.org/packages/Pyke/)
 
 ### Github Releases
-Download from ![Github](https://github.com/wickedlizerd/Pyke/releases)
+Download from [Github](https://github.com/wickedlizerd/Pyke/releases)
 
 ## Usage Example
 This example shows how to hook GameglowState Changes, which we can use to detect if we are in matchmaking, champ select, post-game summary, etc...
