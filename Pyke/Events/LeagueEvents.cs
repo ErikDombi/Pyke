@@ -96,7 +96,7 @@ namespace Pyke.Events
                     var Action = session.Actions[0].FirstOrDefault(t => t.ActorCellId == ActorCellId);
                     if(Action.IsInProgress)
                     {
-                        OnChampSelectTurnToPick?.Invoke(s, Enum.Parse(typeof(PickType), Action.Type));
+                        OnChampSelectTurnToPick?.Invoke(s, Enum.Parse<PickType>(Action.Type));
                     }
                 }
                 catch (Exception ex)
