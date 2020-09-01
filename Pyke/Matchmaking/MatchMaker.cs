@@ -29,9 +29,7 @@ namespace Pyke.Matchmaking
         public void AcceptMatch() => AcceptMatchAsync().GetAwaiter().GetResult();
 
         /// <inheritdoc />
-        public async Task<ReadyCheck> GetReadyCheckAsync() => JsonConvert.DeserializeObject<ReadyCheck>(
-                await leagueAPI.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-matchmaking/v1/ready-check", null)
-            );
+        public async Task<ReadyCheck> GetReadyCheckAsync() => await leagueAPI.RequestHandler.StandardGet<ReadyCheck>("lol-matchmaking/v1/ready-check");
 
         /// <inheritdoc />
         public ReadyCheck GetReadyCheck() => GetReadyCheckAsync().GetAwaiter().GetResult();
@@ -43,9 +41,7 @@ namespace Pyke.Matchmaking
         public void CancelQueue() => CancelQueueAsync().GetAwaiter().GetResult();
 
         /// <inheritdoc />
-        public async Task<QueueInfo> GetQueueInfoAsync() => JsonConvert.DeserializeObject<QueueInfo>(
-                await leagueAPI.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-matchmaking/v1/search", null)
-            );
+        public async Task<QueueInfo> GetQueueInfoAsync() => await leagueAPI.RequestHandler.StandardGet<QueueInfo>("lol-matchmaking/v1/search");
 
         /// <inheritdoc />
         public QueueInfo GetQueueInfo() => GetQueueInfoAsync().GetAwaiter().GetResult();

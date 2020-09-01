@@ -73,10 +73,6 @@ namespace Pyke.ChampSelect
 
         void SelectChampion(string ChampionName, bool LockIn);
 
-        Task SelectChampionAsync(long ChampionId, bool LockIn);
-
-        void SelectChampion(long ChampionId, bool LockIn);
-
         Task<List<Trade>> GetTradesAsync();
 
         List<Trade> GetTrades();

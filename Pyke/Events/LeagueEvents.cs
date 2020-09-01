@@ -23,12 +23,12 @@ namespace Pyke.Events
 
         //Public Events
         public event EventHandler<State> GameflowStateChanged;
-        public event EventHandler<ReadyState> MatchFoundStatusChanged;
+        public event EventHandler<ReadyState> OnMatchFound;
         public event EventHandler<Champ> SelectedChampionChanged;
-        public event EventHandler<List<Trade>> ChampionTradeRecieved;
+        public event EventHandler<List<Trade>> ChampionTradesUpdated;
         /// <inheritdoc/>
         public event EventHandler<Session> OnSessionUpdated;
-        public event EventHandler<Session> OnChampSelectTurnToPick;
+        public event EventHandler<PickType> OnChampSelectTurnToPick;
 
         public LeagueEvents(LeagueAPI leagueAPI)
         {
@@ -50,7 +50,7 @@ namespace Pyke.Events
             {
                 try
                 {
-                    MatchFoundStatusChanged?.Invoke(s, JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString()));
+                    OnMatchFound?.Invoke(s, JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString()));
                 }
                 catch (Exception ex)
                 {
@@ -76,7 +76,7 @@ namespace Pyke.Events
             {
                 try
                 {
-                    ChampionTradeRecieved?.Invoke(s, JsonConvert.DeserializeObject<List<Trade>>(e.Data.ToString()));
+                    ChampionTradesUpdated?.Invoke(s, JsonConvert.DeserializeObject<List<Trade>>(e.Data.ToString()));
                 }
                 catch (Exception ex)
                 {
@@ -94,9 +94,10 @@ namespace Pyke.Events
                     var SummonerId = leagueAPI.Login.GetSession().SummonerId;
                     var ActorCellId = session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId).CellId;
                     var Action = session.Actions[0].FirstOrDefault(t => t.ActorCellId == ActorCellId);
-                    if(Action.IsInProgress && Action.Type == "pick")
+                    if(Action.IsInProgress)
                     {
-                        OnChampSelectTurnToPick?.Invoke(s, session);
+                        
+                        OnChampSelectTurnToPick?.Invoke(s, Enum.Parse(typeof(PickType), Action.Type));
                     }
                 }
                 catch (Exception ex)
