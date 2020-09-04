@@ -65,13 +65,53 @@ namespace Pyke.ChampSelect
         /// <returns><see cref="Session"/></returns>
         Session GetSession();
 
-        Task SetSessionActionAsync(int id, Models.Action action);
+        /// <summary>
+        /// Sets Champ Select Session Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="action"></param>
+        /// <returns>returns <see cref="bool"/> indicating if was success</returns>
+        Task<bool> SetSessionActionAsync(int id, Models.Action action);
 
-        void SetSessionAction(int id, Models.Action action);
+        /// <summary>
+        /// Sets Champ Select Session Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="action"></param>
+        /// <returns>returns <see cref="bool"/> indicating if was success</returns>
+        bool SetSessionAction(int id, Models.Action action);
 
-        Task SelectChampionAsync(string ChampionName, bool LockIn);
+        /// <summary>
+        /// Selects a champion in champ select
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="action"></param>
+        /// <returns>returns <see cref="bool"/> indicating if was success</returns>
+        Task<bool> SelectChampionAsync(string ChampionName, bool LockIn);
 
-        void SelectChampion(string ChampionName, bool LockIn);
+        /// <summary>
+        /// Selects a champion in champ select
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="action"></param>
+        /// <returns>returns <see cref="bool"/> indicating if was success</returns>
+        bool SelectChampion(string ChampionName, bool LockIn);
+
+        /// <summary>
+        /// Selects a champion in champ select
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="action"></param>
+        /// <returns>returns <see cref="bool"/> indicating if was success</returns>
+        Task<bool> SelectChampionAsync(long ChampionName, bool LockIn);
+
+        /// <summary>
+        /// Selects a champion in champ select
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="action"></param>
+        /// <returns>returns <see cref="bool"/> indicating if was success</returns>
+        bool SelectChampion(long ChampionName, bool LockIn);
 
         Task<List<Trade>> GetTradesAsync();
 

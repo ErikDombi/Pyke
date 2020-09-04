@@ -9,9 +9,9 @@ namespace Pyke.Matchmaking
 {
     public class MatchMaker : IMatchMaker
     {
-        private LeagueAPI leagueAPI;
+        private PykeAPI leagueAPI;
 
-        public MatchMaker(LeagueAPI leagueAPI)
+        public MatchMaker(PykeAPI leagueAPI)
         {
             this.leagueAPI = leagueAPI;
         }

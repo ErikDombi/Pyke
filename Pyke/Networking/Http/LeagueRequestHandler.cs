@@ -13,7 +13,7 @@ namespace Pyke.Networking.Http
     internal class LeagueRequestHandler : RequestHandler, ILeagueRequestHandler
     {
 #pragma warning disable CS0169
-        private LeagueAPI leagueAPI;
+        private PykeAPI leagueAPI;
 
         /// <inheritdoc />
         public int Port { get; set; }
@@ -26,8 +26,9 @@ namespace Pyke.Networking.Http
         /// </summary>
         /// <param name="port">The league client's port.</param>
         /// <param name="token">The user's Basic authentication token.</param>
-        public LeagueRequestHandler(int port, string token)
+        public LeagueRequestHandler(int port, string token, PykeAPI api)
         {
+            leagueAPI = api;
             ChangeSettings(port, token);
         }
 
@@ -54,7 +55,7 @@ namespace Pyke.Networking.Http
         {
             var request = await PrepareRequestAsync(httpMethod, relativeUrl, queryParameters, body).ConfigureAwait(false);
             var response = await HttpClient.SendAsync(request).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
+            //response.EnsureSuccessStatusCode();
             return GetResponseContentAsync(response).GetAwaiter().GetResult();
         }
 
@@ -74,6 +75,7 @@ namespace Pyke.Networking.Http
         /// <inheritdoc />
         public async Task<RequestResponse<TResponse>> HttpRequest<TRequest, TResponse>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TRequest body)
         {
+            leagueAPI.logger.Verbose(httpMethod.ToString().ToUpper() + " " + relativeUrl);
             var request = await PrepareRequestAsync(httpMethod, relativeUrl, queryParameters, body);
             var response = await HttpClient.SendAsync(request);
             var content = await GetResponseContentAsync(response);
@@ -84,9 +86,7 @@ namespace Pyke.Networking.Http
             }
             catch (Exception ex)
             {
-#if DEBUG
-                Console.WriteLine("[ERROR] Exception parsing content in HttpRequest(): " + ex.ToString());
-#endif
+                leagueAPI.logger.Error("Exception parsing content in HttpRequest\n" + ex.ToString());
             }
             return new RequestResponse<TResponse>(response, content, parsedObject);
         }

@@ -16,10 +16,12 @@ using Pyke.Utility;
 using Pyke.Websocket;
 using Pyke.Networking.Http.Endpoints;
 using System.Runtime.CompilerServices;
+using Serilog;
+using Serilog.Core;
 
 namespace Pyke
 {
-    public class LeagueAPI : ILeagueClientApi
+    public class PykeAPI : ILeagueClientApi
     {
         private readonly LeagueProcessHandler _processHandler;
         private readonly LockFileHandler _lockFileHandler;
@@ -36,9 +38,15 @@ namespace Pyke
         public Login.Login Login { get; }
         public List<Champ> Champions { get; }
 
-        public LeagueAPI()
+        public Logger logger;
+
+        public PykeAPI(Serilog.Events.LogEventLevel DebugLevel = Serilog.Events.LogEventLevel.Information)
         {
-            //LeagueClientApi API = LeagueClientApi.ConnectAsync().GetAwaiter().GetResult();
+            logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .MinimumLevel.Is(DebugLevel)
+            .CreateLogger();
+
             _processHandler = new LeagueProcessHandler();
             _lockFileHandler = new LockFileHandler();
         }
@@ -49,12 +57,13 @@ namespace Pyke
         /// <param name="port">The league client API's port.</param>
         /// <param name="token">The authentication token.</param>
         /// <param name="eventHandler">The event handler.</param>
-        private LeagueAPI(int port, string token, Websocket.ILeagueEventHandler eventHandler, LeagueProcessHandler _pHandler, LockFileHandler _lfHandler)
+        private PykeAPI(int port, string token, Websocket.ILeagueEventHandler eventHandler, LeagueProcessHandler _pHandler, LockFileHandler _lfHandler, Logger logger)
         {
+            this.logger = logger;
             _processHandler = _pHandler;
             _lockFileHandler = _lfHandler;
             EventHandler = eventHandler;
-            RequestHandler = new LeagueRequestHandler(port, token);
+            RequestHandler = new LeagueRequestHandler(port, token, this);
             RiotClientEndpoint = new RiotClientEndpoint(RequestHandler);
             ProcessControlEndpoint = new ProcessControlEndpoint(RequestHandler);
             _processHandler.Exited += OnDisconnected;
@@ -67,6 +76,7 @@ namespace Pyke
             ClientInfo = new ClientInformation(this);
             Login = new Login.Login(this);
             Champions = JsonConvert.DeserializeObject<ChampionInfo>(new WebClient().DownloadString("https://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/champion.json"), Converter.Settings).Data.Values.ToList();
+            logger.Information("Pyke Ready");
         }
 
 
@@ -74,11 +84,11 @@ namespace Pyke
         /// Connects to the league client api.
         /// </summary>
         /// <returns>A new instance of <see cref="LeagueAPI" /> that's connected to the client api.</returns>
-        public async Task<LeagueAPI> ConnectAsync()
+        public async Task<PykeAPI> ConnectAsync()
         {
             var (port, token) = await GetAuthCredentialsAsync().ConfigureAwait(false);
             var eventHandler = new LeagueEventHandler(port, token);
-            var api = new LeagueAPI(port, token, eventHandler, _processHandler, _lockFileHandler);
+            var api = new PykeAPI(port, token, eventHandler, _processHandler, _lockFileHandler, logger);
             return await EnsureConnectionAsync(api).ConfigureAwait(false);
         }
 
@@ -115,7 +125,7 @@ namespace Pyke
         /// </summary>
         /// <param name="api">The league client api.</param>
         /// <returns>The league client api.</returns>
-        private async Task<LeagueAPI> EnsureConnectionAsync(LeagueAPI api)
+        private async Task<PykeAPI> EnsureConnectionAsync(PykeAPI api)
         {
             while (true)
             {
@@ -127,7 +137,7 @@ namespace Pyke
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("[Exception] " + ex.Message);
+                    logger.Error("Failed to connect to the League Client\n" + ex.Message);
                     await Task.Delay(100).ConfigureAwait(false);
                 }
             }

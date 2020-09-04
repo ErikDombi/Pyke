@@ -8,9 +8,9 @@ namespace Pyke.ClientInfo
 {
     public class ClientInformation
     {
-        private LeagueAPI leagueAPI;
+        private PykeAPI leagueAPI;
 
-        public ClientInformation(LeagueAPI leagueAPI)
+        public ClientInformation(PykeAPI leagueAPI)
         {
             this.leagueAPI = leagueAPI;
         }

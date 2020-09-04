@@ -13,10 +13,10 @@ namespace Pyke.Example
 {
     class Program
     {
-        private static LeagueAPI API;
+        private static PykeAPI API;
         static void Main(string[] args)
         {
-            API = new LeagueAPI().ConnectAsync().GetAwaiter().GetResult();
+            API = new PykeAPI(Serilog.Events.LogEventLevel.Verbose).ConnectAsync().GetAwaiter().GetResult();
 
             API.Events.SubscribeAllEvents();
             API.Events.GameflowStateChanged += Events_GameflowStateChanged;
@@ -25,23 +25,30 @@ namespace Pyke.Example
             Console.ReadLine();
         }
 
+        private static int index = 0;
+        private static string[] champs = { "Annie", "Garen", "Camille", "Corki", "Trundle" };
         private static void Events_OnChampSelectTurn(object sender, PickType e)
         {
-            Console.WriteLine("it is your turn to select a champion");
+            if (index >= champs.Length) index = 0;
+            if (e == PickType.Ban)
+            {
+                API.ChampSelect.SelectChampion(champs[index], true);
+                index++;
+            }
+            else
+            {
+                API.ChampSelect.SelectChampion("Draven", true);
+            }
         }
 
         private static void Events_MatchFoundStatusChanged(object sender, ReadyState e)
         {
-            API.MatchMaker.AcceptMatch();
+
         }
 
         private static void Events_GameflowStateChanged(object sender, State e)
         {
-            // Auto Select Cleanse & Teleport
-            if(e == State.ChampSelect)
-                API.ChampSelect.SelectSummonerSpells(ChampSelect.Models.Spell.Cleanse, ChampSelect.Models.Spell.Teleport);
-
-
+            
         }
     }
 }

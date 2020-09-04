@@ -12,7 +12,7 @@ namespace Pyke.Events
 {
     public class LeagueEvents : ILeagueEvents
     {
-        private LeagueAPI leagueAPI;
+        private PykeAPI leagueAPI;
 
         // Private Events
         private event EventHandler<LeagueEvent> _GameflowStateChanged;
@@ -30,59 +30,62 @@ namespace Pyke.Events
         public event EventHandler<Session> OnSessionUpdated;
         public event EventHandler<PickType> OnChampSelectTurnToPick;
 
-        public LeagueEvents(LeagueAPI leagueAPI)
+        private bool shouldNotifyPickBan = true;
+        private bool shouldNotifyPickSelection = true;
+        private int actionId = 0;
+
+        public LeagueEvents(PykeAPI leagueAPI)
         {
             this.leagueAPI = leagueAPI;
             _GameflowStateChanged += (s, e) =>
             {
                 try
                 {
-                    GameflowStateChanged?.Invoke(s, StateChanged.ParseState(e.Data.ToString()));
+                    var state = StateChanged.ParseState(e.Data.ToString());
+                    leagueAPI.logger.Verbose("Invoked GameflowStateChanged: " + state.ToString());
+                    GameflowStateChanged?.Invoke(s, state);
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    Console.WriteLine("[ERROR] An exception occured while invoking GameflowStateChanged Event.\n" + ex.ToString());
-#endif
+                    leagueAPI.logger.Error("An exception occured while invoking GameflowStateChanged Event.\n" + ex.ToString());
                 }
             };
             _MatchFoundStatusChanged += (s, e) =>
             {
                 try
                 {
+                    leagueAPI.logger.Verbose("Invoked OnMatchFound");
                     OnMatchFound?.Invoke(s, JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString()));
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    Console.WriteLine("[ERROR] An exception occured while invoking MatchFoundStatusChanged Event.\n" + ex.ToString());
-#endif
+                    leagueAPI.logger.Error("An exception occured while invoking MatchFoundStatusChanged Event.\n" + ex.ToString());
                 }
             };
             _SelectedChampionChanged += (s, e) =>
             {
                 try
                 {
-                    SelectedChampionChanged?.Invoke(s, leagueAPI.Champions.FirstOrDefault(t => t.Key == long.Parse(e.Data.ToString())));
+                    var champ = leagueAPI.Champions.FirstOrDefault(t => t.Key == long.Parse(e.Data.ToString()));
+                    if (champ == null) return;
+                    leagueAPI.logger.Verbose("Invoked SelectedChampionChanged with Champion: " + champ.Name);
+                    SelectedChampionChanged?.Invoke(s, champ);
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    Console.WriteLine("[ERROR] An exception occured while invoking SelectedChampionChanged Event.\n" + ex.ToString());
-#endif
+                    leagueAPI.logger.Error("An exception occured while invoking SelectedChampionChanged Event.\n" + ex.ToString());
                 }
             };
             _ChampionTradeRecieved += (s, e) =>
             {
                 try
                 {
+                    leagueAPI.logger.Verbose("Invoked ChampionTradesUpdated");
                     ChampionTradesUpdated?.Invoke(s, JsonConvert.DeserializeObject<List<Trade>>(e.Data.ToString()));
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    Console.WriteLine("[ERROR] An exception occured while invoking ChampionTradeRecieved Event.\n" + ex.ToString());
-#endif
+                    leagueAPI.logger.Error("An exception occured while invoking ChampionTradeRecieved Event.\n" + ex.ToString());
                 }
             };
             _OnSessionUpdated += (s, e) =>
@@ -90,29 +93,48 @@ namespace Pyke.Events
                 try
                 {
                     var session = JsonConvert.DeserializeObject<Session>(e.Data.ToString());
+                    leagueAPI.logger.Verbose("Invoked OnSessionUpdated");
                     OnSessionUpdated?.Invoke(s, session);
                     var SummonerId = leagueAPI.Login.GetSession().SummonerId;
-                    var ActorCellId = session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId).CellId;
-                    var Action = session.Actions[0].FirstOrDefault(t => t.ActorCellId == ActorCellId);
+                    var ActorCellId = session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId)?.CellId;
+                    if (session.Actions.Count == 0)
+                        return;
+                    var myActions = session.Actions.Select(t => t.FirstOrDefault(c => c.ActorCellId == ActorCellId));
+                    var Action = myActions?.FirstOrDefault(t => t.IsInProgress);
+                    if (Action == null) return;
+                    if(Action.Id != actionId)
+                    {
+                        shouldNotifyPickBan = true;
+                        shouldNotifyPickSelection = true;
+                        actionId = Action.Id;
+                    }
                     if(Action.IsInProgress)
                     {
-                        OnChampSelectTurnToPick?.Invoke(s, Enum.Parse<PickType>(Action.Type));
+                        PickType type = Enum.Parse<PickType>(Action.Type, true);
+                        if ((shouldNotifyPickBan && type == PickType.Ban) || (shouldNotifyPickSelection && type == PickType.Pick))
+                        {
+                            leagueAPI.logger.Verbose("Invoked OnChampSelectTurnToPick with type: " + type);
+                            OnChampSelectTurnToPick?.Invoke(s, type);
+                        }
+                        if (Action.Type == "pick")
+                            shouldNotifyPickSelection = false;
+                        if (Action.Type == "ban")
+                            shouldNotifyPickBan = false;
                     }
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    Console.WriteLine("[ERROR] An exception occured while invoking OnSessionUpdated Event.\n" + ex.ToString());
-#endif
+                    leagueAPI.logger.Error("An exception occured while invoking OnSessionUpdated Event.\n" + ex.ToString());
+                    leagueAPI.logger.Debug("  ----------------- DEBUG DATA -------------");
+                    leagueAPI.logger.Debug(e.Data.ToString());
+                    leagueAPI.logger.Debug("----------------- END DEBUG DATA -------------");
                 }
             };
         }
 
         public void SubscribeEvent(EventType Event)
         {
-#if DEBUG
-            Console.WriteLine("[DEBUG] Subscribed Event: " + Event.ToString());
-#endif
+            leagueAPI.logger.Information("Subscribed Event: " + Event.ToString());
 
             switch (Event)
             {
@@ -137,9 +159,7 @@ namespace Pyke.Events
 
         public void UnsubscribeEvent(EventType Event)
         {
-#if DEBUG
-            Console.WriteLine("[DEBUG] Subscribed Event: " + Event.ToString());
-#endif
+            leagueAPI.logger.Information("Unsubscribed Event: " + Event.ToString());
 
             switch (Event)
             {

@@ -95,5 +95,9 @@ namespace Pyke.Networking.Http
         Task<TResponse> StandardPost<TResponse>(string url);
 
         Task StandardPost(string url);
+
+        Task<RequestResponse<object>> HttpRequest(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters);
+        
+        Task<RequestResponse<object>> HttpRequest<TBody>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TBody body);
     }
 }

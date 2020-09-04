@@ -14,9 +14,9 @@ namespace Pyke.ChampSelect
 {
     public class ChampSelect : IChampSelect
     {
-        private LeagueAPI leagueAPI;
+        private PykeAPI leagueAPI;
 
-        public ChampSelect(LeagueAPI leagueAPI)
+        public ChampSelect(PykeAPI leagueAPI)
         {
             this.leagueAPI = leagueAPI;
         }
@@ -40,35 +40,44 @@ namespace Pyke.ChampSelect
 
         public Session GetSession() => GetSessionAsync().GetAwaiter().GetResult();
 
-        public async Task SetSessionActionAsync(int id, Models.Action action) => await leagueAPI.RequestHandler.GetJsonResponseAsync(
-                httpMethod: HttpMethod.Patch,
-                relativeUrl: $"/lol-champ-select/v1/session/actions/{id}",
-                queryParameters: null,
-                body: action
-            );
+        public async Task<bool> SetSessionActionAsync(int id, Models.Action action) => (await leagueAPI.RequestHandler.HttpRequest<Models.Action>(
+                HttpMethod.Patch,
+                $"/lol-champ-select/v1/session/actions/{id}",
+                null,
+                action
+            )).didFail;
 
-        public void SetSessionAction(int id, Models.Action action) => SetSessionActionAsync(id, action).GetAwaiter().GetResult();
+        public bool SetSessionAction(int id, Models.Action action) => SetSessionActionAsync(id, action).GetAwaiter().GetResult();
 
-        public async Task SelectChampionAsync(string ChampionName, bool LockIn)
+        public async Task<bool> SelectChampionAsync(string ChampionName, bool LockIn)
         {
             var champId = leagueAPI.Champions.FirstOrDefault(t => t.Name.ToLower() == ChampionName.ToLower()).Key;
-            await SelectChampionAsync(champId, LockIn);
+            return await SelectChampionAsync(champId, LockIn);
         }
 
-        public void SelectChampion(string ChampionName, bool LockIn) => SelectChampionAsync(ChampionName, LockIn).GetAwaiter().GetResult();
+        public bool SelectChampion(string ChampionName, bool LockIn) => SelectChampionAsync(ChampionName, LockIn).GetAwaiter().GetResult();
 
-        public async Task SelectChampionAsync(long ChampionId, bool LockIn)
+        public async Task<bool> SelectChampionAsync(long ChampionId, bool LockIn)
         {
-            var Session = await GetSessionAsync();
-            var SummonerId = (await leagueAPI.Login.GetSessionAsync()).SummonerId;
-            var ActorCellId = Session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId).CellId;
-            var Action = Session.Actions[0].FirstOrDefault(t => t.ActorCellId == ActorCellId);
-            Action.ChampionId = (int)leagueAPI.Champions.FirstOrDefault(t => t.Key == ChampionId).Key;
-            Action.Completed = LockIn;
-            SetSessionAction(Action.Id, Action);
+            try
+            {
+                var Session = await GetSessionAsync();
+                var SummonerId = (await leagueAPI.Login.GetSessionAsync()).SummonerId;
+                var ActorCellId = Session?.MyTeam?.FirstOrDefault(t => t.SummonerId == SummonerId)?.CellId;
+                if (ActorCellId == null) return false;
+                var myActions = Session.Actions.Select(t => t.FirstOrDefault(c => c.ActorCellId == ActorCellId));
+                var Action = myActions?.FirstOrDefault(t => t.IsInProgress);
+                Action.ChampionId = (int)leagueAPI.Champions.FirstOrDefault(t => t.Key == ChampionId).Key;
+                Action.Completed = LockIn;
+                return SetSessionAction(Action.Id, Action);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public void SelectChampion(long ChampionId, bool LockIn) => SelectChampionAsync(ChampionId, LockIn).GetAwaiter().GetResult();
+        public bool SelectChampion(long ChampionId, bool LockIn) => SelectChampionAsync(ChampionId, LockIn).GetAwaiter().GetResult();
 
         public async Task<List<Trade>> GetTradesAsync() => await leagueAPI.RequestHandler.StandardGet<List<Trade>>("/lol-champ-select/v1/session/trades");
 

@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Erik Dombi")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Pyke is a library for interacting with Riot\'s League of Legends Client (LCU)")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pyke")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pyke")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.1.0.0")]

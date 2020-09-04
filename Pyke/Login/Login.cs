@@ -10,9 +10,9 @@ namespace Pyke.Login
 {
     public class Login
     {
-        private LeagueAPI leagueAPI;
+        private PykeAPI leagueAPI;
 
-        public Login(LeagueAPI leagueAPI)
+        public Login(PykeAPI leagueAPI)
         {
             this.leagueAPI = leagueAPI;
         }
