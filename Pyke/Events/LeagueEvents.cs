@@ -29,10 +29,13 @@ namespace Pyke.Events
         /// <inheritdoc/>
         public event EventHandler<Session> OnSessionUpdated;
         public event EventHandler<PickType> OnChampSelectTurnToPick;
+        public event EventHandler<SummonerSelection> OtherSummonerSelectionUpdated;
 
         private bool shouldNotifyPickBan = true;
         private bool shouldNotifyPickSelection = true;
         private int actionId = 0;
+
+        private Session oldSession;
 
         public LeagueEvents(PykeAPI leagueAPI)
         {
@@ -95,32 +98,9 @@ namespace Pyke.Events
                     var session = JsonConvert.DeserializeObject<Session>(e.Data.ToString());
                     leagueAPI.logger.Verbose("Invoked OnSessionUpdated");
                     OnSessionUpdated?.Invoke(s, session);
-                    var SummonerId = leagueAPI.Login.GetSession().SummonerId;
-                    var ActorCellId = session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId)?.CellId;
-                    if (session.Actions.Count == 0)
-                        return;
-                    var myActions = session.Actions.Select(t => t.FirstOrDefault(c => c.ActorCellId == ActorCellId));
-                    var Action = myActions?.FirstOrDefault(t => t.IsInProgress);
-                    if (Action == null) return;
-                    if(Action.Id != actionId)
-                    {
-                        shouldNotifyPickBan = true;
-                        shouldNotifyPickSelection = true;
-                        actionId = Action.Id;
-                    }
-                    if(Action.IsInProgress)
-                    {
-                        PickType type = Enum.Parse<PickType>(Action.Type, true);
-                        if ((shouldNotifyPickBan && type == PickType.Ban) || (shouldNotifyPickSelection && type == PickType.Pick))
-                        {
-                            leagueAPI.logger.Verbose("Invoked OnChampSelectTurnToPick with type: " + type);
-                            OnChampSelectTurnToPick?.Invoke(s, type);
-                        }
-                        if (Action.Type == "pick")
-                            shouldNotifyPickSelection = false;
-                        if (Action.Type == "ban")
-                            shouldNotifyPickBan = false;
-                    }
+                    CheckOnChampSelect(s, session);
+                    CheckOtherUpdatedChamp(s, session);
+                    oldSession = session;
                 }
                 catch (Exception ex)
                 {
@@ -130,6 +110,66 @@ namespace Pyke.Events
                     leagueAPI.logger.Debug("----------------- END DEBUG DATA -------------");
                 }
             };
+        }
+
+        private void CheckOtherUpdatedChamp(object s, Session session)
+        {
+            if (oldSession == null || session == null) return;
+            // Store old session, compare if actions are different, if so, find which one and return it
+            if (session.Actions.Count != oldSession.Actions.Count)
+                return;
+            var currentNewActions = session.Actions.LastOrDefault();
+            var currentOldActions = oldSession.Actions.LastOrDefault();
+            if (currentNewActions == null || currentOldActions == null)
+                return;
+            for(int i = 0; i < currentNewActions.Count; i++)
+            {
+                if(JsonConvert.SerializeObject(currentNewActions[i]) != JsonConvert.SerializeObject(currentOldActions[i]))
+                {
+                    var action = currentNewActions[i];
+                    var players = leagueAPI.ChampSelect.GetRoster();
+                    var currentPlayer = players.FirstOrDefault(t => t.CellId == action.ActorCellId);
+                    var summonerSelection = new SummonerSelection() { SelectionInfo = action, SummonerInfo = currentPlayer };
+                    OtherSummonerSelectionUpdated?.Invoke(s, summonerSelection);
+                }
+            }
+        }
+
+        private void CheckOnChampSelect(object s, Session session)
+        {
+            try
+            {
+                var SummonerId = leagueAPI.Login.GetSession().SummonerId;
+                var ActorCellId = session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId)?.CellId;
+                if (session.Actions.Count == 0)
+                    return;
+                var myActions = session.Actions.Select(t => t.FirstOrDefault(c => c.ActorCellId == ActorCellId));
+                var Action = myActions?.FirstOrDefault(t => t != null && t.IsInProgress);
+                if (Action == null) return;
+                if (Action.Id != actionId)
+                {
+                    shouldNotifyPickBan = true;
+                    shouldNotifyPickSelection = true;
+                    actionId = Action.Id;
+                }
+                if (Action.IsInProgress)
+                {
+                    PickType type = Enum.Parse<PickType>(Action.Type, true);
+                    if ((shouldNotifyPickBan && type == PickType.Ban) || (shouldNotifyPickSelection && type == PickType.Pick))
+                    {
+                        leagueAPI.logger.Verbose("Invoked OnChampSelectTurnToPick with type: " + type);
+                        OnChampSelectTurnToPick?.Invoke(s, type);
+                    }
+                    if (Action.Type == "pick")
+                        shouldNotifyPickSelection = false;
+                    if (Action.Type == "ban")
+                        shouldNotifyPickBan = false;
+                }
+            }
+            catch
+            {
+                leagueAPI.logger.Error("");
+            }
         }
 
         public void SubscribeEvent(EventType Event)

@@ -38,6 +38,8 @@ namespace Pyke
         public Login.Login Login { get; }
         public List<Champ> Champions { get; }
 
+        public Summoners.Summoners Summoners { get; }
+
         public Logger logger;
 
         public PykeAPI(Serilog.Events.LogEventLevel DebugLevel = Serilog.Events.LogEventLevel.Information)
@@ -75,6 +77,7 @@ namespace Pyke
             MatchMaker = new MatchMaker(this);
             ClientInfo = new ClientInformation(this);
             Login = new Login.Login(this);
+            Summoners = new Summoners.Summoners(this);
             Champions = JsonConvert.DeserializeObject<ChampionInfo>(new WebClient().DownloadString("https://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/champion.json"), Converter.Settings).Data.Values.ToList();
             logger.Information("Pyke Ready");
         }

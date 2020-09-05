@@ -23,6 +23,8 @@ namespace Pyke.Events
         /// </summary>
         public event EventHandler<Session> OnSessionUpdated;
 
+        event EventHandler<SummonerSelection> OtherSummonerSelectionUpdated;
+
         public void SubscribeEvent(EventType Event);
 
         public void UnsubscribeEvent(EventType Event);

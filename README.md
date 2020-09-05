@@ -36,8 +36,8 @@ This example shows how to hook GameglowState Changes, which we can use to detect
  ```
 
 ## Features
- [X] = Completed
- [ ] = Planned
+ - [X] = Completed
+ - [ ] = Planned
 
 ### Champ Select
  - [X] Get All Champions
