@@ -27,5 +27,9 @@ namespace Pyke.Summoners
 
         public async Task<List<BasicSummoner>> GetSummonerNamesByIds(int[] ids) =>
             throw new NotImplementedException();
+
+        public async Task<Summoner> GetCurrentSummonerAsync() => await leagueAPI.RequestHandler.StandardGet<Summoner>("/lol-summoner/v1/current-summoner");
+
+        public Summoner GetCurrentSommer() => GetCurrentSummonerAsync().GetAwaiter().GetResult();
     }
 }

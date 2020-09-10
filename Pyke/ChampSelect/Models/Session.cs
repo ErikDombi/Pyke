@@ -8,13 +8,13 @@ namespace Pyke.ChampSelect.Models
     public class Bans
     {
         [JsonProperty("myTeamBans")]
-        public List<object> MyTeamBans;
+        public List<int> MyTeamBans;
 
         [JsonProperty("numBans")]
         public long NumBans;
 
         [JsonProperty("theirTeamBans")]
-        public List<object> TheirTeamBans;
+        public List<int> TheirTeamBans;
     }
 
     public class ChatDetails
@@ -32,7 +32,7 @@ namespace Pyke.ChampSelect.Models
         public long AdditionalRerolls;
 
         [JsonProperty("unlockedSkinIds")]
-        public List<object> UnlockedSkinIds;
+        public List<int> UnlockedSkinIds;
     }
 
     public class Player
@@ -134,7 +134,7 @@ namespace Pyke.ChampSelect.Models
         public Bans Bans;
 
         [JsonProperty("benchChampionIds")]
-        public List<object> BenchChampionIds;
+        public List<int> BenchChampionIds;
 
         [JsonProperty("benchEnabled")]
         public bool BenchEnabled;
@@ -188,8 +188,11 @@ namespace Pyke.ChampSelect.Models
         public Timer Timer;
 
         [JsonProperty("trades")]
-        public List<object> Trades;
+        public List<Events.Models.Trade> Trades;
     }
 
-
+    public enum SessionTradeState
+    {
+        AVAILABLE, BUSY, INVALID
+    }
 }

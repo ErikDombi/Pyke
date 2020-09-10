@@ -17,7 +17,7 @@ namespace Pyke.Matchmaking
         public string PlayerResponse;
 
         [JsonProperty("state")]
-        public string State;
+        public ReadyStateState State;
 
         [JsonProperty("suppressUx")]
         public bool SuppressUx;

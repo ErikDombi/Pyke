@@ -32,7 +32,8 @@ namespace Pyke.Login.Models
         public string Puuid;
 
         [JsonProperty("state")]
-        public string State;
+        [JsonConverter(typeof(StringEnumConverter))]
+        public SessionState State;
 
         [JsonProperty("summonerId")]
         public int SummonerId;
@@ -42,5 +43,13 @@ namespace Pyke.Login.Models
 
         [JsonProperty("username")]
         public string Username;
+    }
+
+    public enum SessionState
+    {
+        IN_PROGRESS,
+        SUCCEEDED,
+        LOGGING_OUT,
+        ERROR
     }
 }
