@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -106,7 +107,8 @@ namespace Pyke.ChampSelect.Models
         [JsonProperty("pickTurn")]
         public long PickTurn;
         [JsonProperty("type")]
-        public string Type;
+        [JsonConverter(typeof(StringEnumConverter))]
+        public SessionActionType Type;
 
     }
 
@@ -194,5 +196,12 @@ namespace Pyke.ChampSelect.Models
     public enum SessionTradeState
     {
         AVAILABLE, BUSY, INVALID
+    }
+
+    // TODO: Verify these are correct
+    public enum SessionActionType
+    {
+        Pick,
+        Ban
     }
 }

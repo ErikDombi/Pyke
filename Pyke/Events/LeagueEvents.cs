@@ -28,7 +28,7 @@ namespace Pyke.Events
         public event EventHandler<List<Trade>> ChampionTradesUpdated;
         /// <inheritdoc/>
         public event EventHandler<Session> OnSessionUpdated;
-        public event EventHandler<PickType> OnChampSelectTurnToPick;
+        public event EventHandler<SessionActionType> OnChampSelectTurnToPick;
         public event EventHandler<SummonerSelection> OtherSummonerSelectionUpdated;
 
         private bool shouldNotifyPickBan = true;
@@ -156,15 +156,15 @@ namespace Pyke.Events
                 }
                 if (Action.IsInProgress)
                 {
-                    PickType type = Enum.Parse<PickType>(Action.Type, true);
-                    if ((shouldNotifyPickBan && type == PickType.Ban) || (shouldNotifyPickSelection && type == PickType.Pick))
+                    SessionActionType type = Action.Type;
+                    if ((shouldNotifyPickBan && type == SessionActionType.Ban) || (shouldNotifyPickSelection && type == SessionActionType.Pick))
                     {
                         leagueAPI.logger.Verbose("Invoked OnChampSelectTurnToPick with type: " + type);
                         OnChampSelectTurnToPick?.Invoke(s, type);
                     }
-                    if (Action.Type == "pick")
+                    if (Action.Type == SessionActionType.Pick)
                         shouldNotifyPickSelection = false;
-                    if (Action.Type == "ban")
+                    if (Action.Type == SessionActionType.Ban)
                         shouldNotifyPickBan = false;
                 }
             }

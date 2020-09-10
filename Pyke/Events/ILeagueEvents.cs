@@ -16,7 +16,7 @@ namespace Pyke.Events
 
         public event EventHandler<List<Trade>> ChampionTradesUpdated;
 
-        event EventHandler<PickType> OnChampSelectTurnToPick;
+        event EventHandler<SessionActionType> OnChampSelectTurnToPick;
 
         /// <summary>
         /// Is invoked when any changes occur during champ select. You should update all champ select data when this is invoked.
