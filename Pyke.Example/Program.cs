@@ -5,6 +5,7 @@ using Pyke.Events.Models;
 using Pyke.Websocket;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using static Pyke.Events.ILeagueEvents;
@@ -19,11 +20,21 @@ namespace Pyke.Example
             API = new PykeAPI(Serilog.Events.LogEventLevel.Debug).ConnectAsync().GetAwaiter().GetResult();
 
             API.Events.SubscribeAllEvents();
-            API.Events.GameflowStateChanged += Events_GameflowStateChanged;
-            API.Events.OnMatchFound += Events_MatchFoundStatusChanged;
-            API.Events.OnChampSelectTurnToPick += Events_OnChampSelectTurn;
-            API.Events.OtherSummonerSelectionUpdated += Events_OtherSummonerSelectionUpdated;
-            Console.ReadLine();
+            API.Events.OnReadyStateChanged += Events_OnReadyStateChanged;
+
+            while (true)
+            {
+                var url = Console.ReadLine();
+                var response = API.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, url, null);
+            }
+        }
+
+        private static void Events_OnReadyStateChanged(object sender, ReadyState e)
+        {
+            if(e.state == ReadyStateState.InProgress && e.PlayerResponse == ReadyStatePlayerResponse.None)
+            {
+                API.MatchMaker.AcceptMatch();
+            }
         }
 
         private static void Events_OtherSummonerSelectionUpdated(object sender, SummonerSelection e)
@@ -55,7 +66,7 @@ namespace Pyke.Example
             }
             else
             {
-                API.ChampSelect.SelectChampion("Akali", true);
+                API.ChampSelect.SelectChampion("Fizz", true);
             }
         }
 

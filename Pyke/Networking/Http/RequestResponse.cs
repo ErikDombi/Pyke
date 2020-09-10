@@ -13,7 +13,7 @@ namespace Pyke.Networking.Http
         public HttpResponseMessage httpResponseMessage;
         public string Content;
         public TResponseType ParsedResponse;
-        public bool didFail => httpResponseMessage.StatusCode != System.Net.HttpStatusCode.OK;
+        public bool didFail => httpResponseMessage.StatusCode != System.Net.HttpStatusCode.OK || httpResponseMessage.StatusCode == System.Net.HttpStatusCode.NoContent;
         public RequestResponseError ResponseError;
 
         public RequestResponse(HttpResponseMessage httpResponseMessage, string Content, TResponseType ParsedObject) {
