@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Pyke.Events.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

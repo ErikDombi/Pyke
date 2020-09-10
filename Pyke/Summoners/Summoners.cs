@@ -30,6 +30,6 @@ namespace Pyke.Summoners
 
         public async Task<Summoner> GetCurrentSummonerAsync() => await leagueAPI.RequestHandler.StandardGet<Summoner>("/lol-summoner/v1/current-summoner");
 
-        public Summoner GetCurrentSommer() => GetCurrentSummonerAsync().GetAwaiter().GetResult();
+        public Summoner GetCurrentSummoner() => GetCurrentSummonerAsync().GetAwaiter().GetResult();
     }
 }
