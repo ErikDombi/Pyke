@@ -28,14 +28,14 @@ namespace Pyke.ChampSelect
         /// Endpoint: /lol-champ-select/v1/pickable-champion-ids
         /// </summary>
         /// <returns><see cref="List{Champion}"/></returns>
-        Task<List<Champion>> GetPickableChampionsAsync();
+        Task<List<Champ>> GetPickableChampionsAsync();
         // TODO: Rewrite to use /lol-champ-select/v1/pickable-champion-ids
 
         /// <summary>
         /// Get a list of all pickable champions in Champ Select
         /// </summary>
         /// <returns><see cref="List{Champion}"/></returns>
-        List<Champion> GetPickableChampions();
+        List<Champ> GetPickableChampions();
 
         /// <summary>
         /// Get a list of all bannable champions in Champ Select

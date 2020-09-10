@@ -23,7 +23,7 @@ namespace Pyke.Events
 
         //Public Events
         public event EventHandler<State> GameflowStateChanged;
-        public event EventHandler<ReadyState> OnMatchFound;
+        public event EventHandler<ReadyState> OnReadyStateChanged;
         public event EventHandler<Champ> SelectedChampionChanged;
         public event EventHandler<List<Trade>> ChampionTradesUpdated;
         /// <inheritdoc/>
@@ -58,7 +58,9 @@ namespace Pyke.Events
                 try
                 {
                     leagueAPI.logger.Verbose("Invoked OnMatchFound");
-                    OnMatchFound?.Invoke(s, JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString()));
+                    ReadyState state = JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString());
+                    if(state != null)
+                        OnReadyStateChanged?.Invoke(s, state);
                 }
                 catch (Exception ex)
                 {

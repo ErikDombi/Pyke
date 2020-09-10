@@ -90,14 +90,22 @@ namespace Pyke.Networking.Http
         /// <returns>The deserialized response.</returns>
         Task<RequestResponse<TResponse>> HttpRequest<TResponse>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters);
 
-        Task<TResponse> StandardGet<TResponse>(string url);
+        Task<RequestResponse<object>> HttpRequest(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters);
+        
+        Task<RequestResponse<object>> HttpRequest<TBody>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TBody body);
+
+        Task<TResponse> StandardPost<TRequest, TResponse>(string url, TRequest body);
+
+        Task StandardPost<TRequest>(string url, TRequest body);
 
         Task<TResponse> StandardPost<TResponse>(string url);
 
         Task StandardPost(string url);
 
-        Task<RequestResponse<object>> HttpRequest(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters);
-        
-        Task<RequestResponse<object>> HttpRequest<TBody>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TBody body);
+        Task<TResponse> StandardGet<TRequest, TResponse>(string url, TRequest body);
+
+        Task StandardGet<TRequest>(string url, TRequest body);
+
+        Task<TResponse> StandardGet<TResponse>(string url);
     }
 }

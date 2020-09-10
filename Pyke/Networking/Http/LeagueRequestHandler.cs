@@ -95,22 +95,31 @@ namespace Pyke.Networking.Http
         public async Task<RequestResponse<TResponse>> HttpRequest<TResponse>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters) => await HttpRequest<object, TResponse>(httpMethod, relativeUrl, queryParameters, null);
 
         public async Task<RequestResponse<object>> HttpRequest(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters) => await HttpRequest<object, object>(httpMethod, relativeUrl, queryParameters, null);
+        
         public async Task<RequestResponse<object>> HttpRequest<TBody>(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters, TBody body) => await HttpRequest<object, object>(httpMethod, relativeUrl, queryParameters, body);
-
-        public async Task<TResponse> StandardGet<TResponse>(string url)
+        
+        public async Task<TResponse> StandardPost<TRequest, TResponse>(string url, TRequest body)
         {
-            var response = await HttpRequest<TResponse>(HttpMethod.Get, url, null);
+            var response = await HttpRequest<TRequest, TResponse>(HttpMethod.Post, url, null, body);
             if (response.didFail) return default(TResponse);
             return response.ParsedResponse;
         }
 
-        public async Task<TResponse> StandardPost<TResponse>(string url)
-        {
-            var response = await HttpRequest<TResponse>(HttpMethod.Get, url, null);
-            if (response.didFail) return default(TResponse);
-            return response.ParsedResponse;
-        }
+        public async Task StandardPost<TRequest>(string url, TRequest body) => await StandardPost<TRequest, object>(url, body);
+
+        public async Task<TResponse> StandardPost<TResponse>(string url) => await StandardPost<object, TResponse>(url, null);
 
         public async Task StandardPost(string url) => await GetJsonResponseAsync(HttpMethod.Post, url, null);
+
+        public async Task<TResponse> StandardGet<TRequest, TResponse>(string url, TRequest body)
+        {
+            var response = await HttpRequest<TRequest, TResponse>(HttpMethod.Get, url, null, body);
+            if (response.didFail) return default(TResponse);
+            return response.ParsedResponse;
+        }
+
+        public async Task StandardGet<TRequest>(string url, TRequest body) => await StandardGet<TRequest, object>(url, body);
+
+        public async Task<TResponse> StandardGet<TResponse>(string url) => await StandardGet<object, TResponse>(url, null);
     }
 }

@@ -18,6 +18,7 @@ using Pyke.Networking.Http.Endpoints;
 using System.Runtime.CompilerServices;
 using Serilog;
 using Serilog.Core;
+using Pyke.Gameflow;
 
 namespace Pyke
 {
@@ -35,9 +36,9 @@ namespace Pyke
         public ILeagueEvents Events { get; }
         public IMatchMaker MatchMaker { get; }
         public ClientInformation ClientInfo { get; }
+        public ClientGameflow Gameflow { get; }
         public Login.Login Login { get; }
         public List<Champ> Champions { get; }
-
         public Summoners.Summoners Summoners { get; }
 
         public Logger logger;
@@ -74,6 +75,7 @@ namespace Pyke
             _lockFileHandler = new LockFileHandler();
             ChampSelect = new ChampSelect.ChampSelect(this);
             Events = new LeagueEvents(this);
+            Gameflow = new ClientGameflow(this);
             MatchMaker = new MatchMaker(this);
             ClientInfo = new ClientInformation(this);
             Login = new Login.Login(this);

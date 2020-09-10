@@ -25,9 +25,13 @@ namespace Pyke.ChampSelect
 
         public List<Champion> GetChampions() => GetChampionsAsync().GetAwaiter().GetResult();
 
-        public async Task<List<Champion>> GetPickableChampionsAsync() => (await GetChampionsAsync()).Where(t => (t.owned || t.freeToPlay) && !t.disabled && !t.selectionStatus.pickedByOtherOrBanned).ToList();
+        public async Task<List<Champ>> GetPickableChampionsAsync() {
+            var response = await leagueAPI.RequestHandler.HttpRequest<List<long>>(HttpMethod.Get, "/lol-champ-select/v1/pickable-champion-ids", null);
+            if (response.didFail) return null;
+            return response.ParsedResponse.Select(c => leagueAPI.Champions.FirstOrDefault(t => t.Key == c)).ToList();
+        }
 
-        public List<Champion> GetPickableChampions() => GetPickableChampionsAsync().GetAwaiter().GetResult();
+        public List<Champ> GetPickableChampions() => GetPickableChampionsAsync().GetAwaiter().GetResult();
 
         public async Task<List<Champ>> GetBannableChampionsAsync() {
             var response = await leagueAPI.RequestHandler.HttpRequest<List<long>>(HttpMethod.Get, "/lol-champ-select/v1/bannable-champion-ids", null);
@@ -66,7 +70,7 @@ namespace Pyke.ChampSelect
                 var ActorCellId = Session?.MyTeam?.FirstOrDefault(t => t.SummonerId == SummonerId)?.CellId;
                 if (ActorCellId == null) return false;
                 var myActions = Session.Actions.Select(t => t.FirstOrDefault(c => c.ActorCellId == ActorCellId));
-                var Action = myActions?.FirstOrDefault(t => t.IsInProgress);
+                var Action = myActions?.FirstOrDefault(t => t != null && t.IsInProgress);
                 Action.ChampionId = (int)leagueAPI.Champions.FirstOrDefault(t => t.Key == ChampionId).Key;
                 Action.Completed = LockIn;
                 return SetSessionAction(Action.Id, Action);

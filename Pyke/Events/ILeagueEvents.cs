@@ -10,7 +10,7 @@ namespace Pyke.Events
     {
         public event EventHandler<State> GameflowStateChanged;
 
-        public event EventHandler<ReadyState> OnMatchFound;
+        public event EventHandler<ReadyState> OnReadyStateChanged;
 
         public event EventHandler<Champ> SelectedChampionChanged;
 
