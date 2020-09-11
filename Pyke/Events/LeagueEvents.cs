@@ -141,7 +141,8 @@ namespace Pyke.Events
         {
             try
             {
-                var SummonerId = leagueAPI.Login.GetSession().SummonerId;
+                var SummonerId = leagueAPI.Login.GetSession()?.SummonerId;
+                if (SummonerId == null) return;
                 var ActorCellId = session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId)?.CellId;
                 if (session.Actions.Count == 0)
                     return;

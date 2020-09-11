@@ -17,13 +17,29 @@ namespace Pyke.Example
         private static PykeAPI API;
         static void Main(string[] args)
         {
-            API = new PykeAPI(Serilog.Events.LogEventLevel.Debug).ConnectAsync().GetAwaiter().GetResult();
+            API = new PykeAPI(Serilog.Events.LogEventLevel.Information).ConnectAsync().GetAwaiter().GetResult();
 
             API.Events.SubscribeAllEvents();
+            API.Events.OnChampSelectTurnToPick += Events_OnChampSelectTurnToPick;
 
             while (true)
             {
                 var url = Console.ReadLine();
+            }
+        }
+
+        private static int index = 0;
+        private static string[] champs = { "garen", "yasuo", "corki" };
+        private static void Events_OnChampSelectTurnToPick(object sender, SessionActionType e)
+        {
+            if(e == SessionActionType.Ban)
+            {
+                API.ChampSelect.SelectChampion(champs[index], true);
+                index++;
+            }else
+            {
+                API.ChampSelect.SelectChampion("yone", true);
+                API.ChampSelect.SelectSummonerSpells(Spell.Exhaust, Spell.Cleanse);
             }
         }
     }
