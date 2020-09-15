@@ -89,5 +89,6 @@ This example shows how to hook GameglowState Changes, which we can use to detect
  Pyke was made possible using the following libraries
   - LCU-Sharp
   - Json.NET
+  - websocketsharp
 
   

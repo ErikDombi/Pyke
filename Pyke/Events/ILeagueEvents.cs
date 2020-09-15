@@ -10,13 +10,13 @@ namespace Pyke.Events
     {
         public event EventHandler<State> GameflowStateChanged;
 
-        public event EventHandler<ReadyState> OnMatchFound;
+        public event EventHandler<ReadyState> OnReadyStateChanged;
 
         public event EventHandler<Champ> SelectedChampionChanged;
 
         public event EventHandler<List<Trade>> ChampionTradesUpdated;
 
-        event EventHandler<PickType> OnChampSelectTurnToPick;
+        event EventHandler<SessionActionType> OnChampSelectTurnToPick;
 
         /// <summary>
         /// Is invoked when any changes occur during champ select. You should update all champ select data when this is invoked.

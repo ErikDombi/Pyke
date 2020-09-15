@@ -22,7 +22,7 @@ namespace Pyke.Utility
         /// </summary>
         /// <param name="path">The lockfile's path.</param>
         /// <returns>The league client's port and the user's authentication token.</returns>
-        public async Task<(int port, string token)> ParseLockFileAsync(string path)
+        public async Task<(int port, string token, int procId)> ParseLockFileAsync(string path)
         {
             var lockfilePath = await WaitForFileAsync(path).ConfigureAwait(false);
             using (var fileStream = new FileStream(lockfilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -36,7 +36,7 @@ namespace Pyke.Utility
                     var port = int.Parse(items[2]);
                     var token = items[3];
 
-                    return (port, token);
+                    return (port, token, processId);
                 }
             }
         }

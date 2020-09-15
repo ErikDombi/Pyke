@@ -5,6 +5,7 @@ using Pyke.Events.Models;
 using Pyke.Websocket;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using static Pyke.Events.ILeagueEvents;
@@ -16,57 +17,30 @@ namespace Pyke.Example
         private static PykeAPI API;
         static void Main(string[] args)
         {
-            API = new PykeAPI(Serilog.Events.LogEventLevel.Debug).ConnectAsync().GetAwaiter().GetResult();
+            API = new PykeAPI(Serilog.Events.LogEventLevel.Information).ConnectAsync().GetAwaiter().GetResult();
 
             API.Events.SubscribeAllEvents();
-            API.Events.GameflowStateChanged += Events_GameflowStateChanged;
-            API.Events.OnMatchFound += Events_MatchFoundStatusChanged;
-            API.Events.OnChampSelectTurnToPick += Events_OnChampSelectTurn;
-            API.Events.OtherSummonerSelectionUpdated += Events_OtherSummonerSelectionUpdated;
-            Console.ReadLine();
-        }
+            API.Events.OnChampSelectTurnToPick += Events_OnChampSelectTurnToPick;
 
-        private static void Events_OtherSummonerSelectionUpdated(object sender, SummonerSelection e)
-        {
-            if (e.SelectionInfo.IsAllyAction)
+            while (true)
             {
-                if(e.SelectionInfo.Type == "pick")
-                {
-                    var summoner = API.Summoners.GetSummonerById(e.SummonerInfo.SummonerId);
-                    Console.WriteLine("### " + summoner.DisplayName + (e.SelectionInfo.Completed ? " Locked in " : " Selected ") + API.Champions.FirstOrDefault(x => x.Key == e.SelectionInfo.ChampionId).Name);
-                }
-                else
-                {
-                    var summoner = API.Summoners.GetSummonerById(e.SummonerInfo.SummonerId);
-                    Console.WriteLine("### " + summoner.DisplayName + (e.SelectionInfo.Completed ? " Locked in ban " : " Selected ban ") + API.Champions.FirstOrDefault(x => x.Key == e.SelectionInfo.ChampionId).Name);
-                }
+                var url = Console.ReadLine();
             }
         }
 
         private static int index = 0;
-        private static string[] champs = { "Veigar" };
-        private static void Events_OnChampSelectTurn(object sender, PickType e)
+        private static string[] champs = { "garen", "yasuo", "corki" };
+        private static void Events_OnChampSelectTurnToPick(object sender, SessionActionType e)
         {
-            if (index >= champs.Length) index = 0;
-            if (e == PickType.Ban)
+            if(e == SessionActionType.Ban)
             {
                 API.ChampSelect.SelectChampion(champs[index], true);
                 index++;
-            }
-            else
+            }else
             {
-                API.ChampSelect.SelectChampion("Akali", true);
+                API.ChampSelect.SelectChampion("yone", true);
+                API.ChampSelect.SelectSummonerSpells(Spell.Exhaust, Spell.Cleanse);
             }
-        }
-
-        private static void Events_MatchFoundStatusChanged(object sender, ReadyState e)
-        {
-
-        }
-
-        private static void Events_GameflowStateChanged(object sender, State e)
-        {
-            
         }
     }
 }

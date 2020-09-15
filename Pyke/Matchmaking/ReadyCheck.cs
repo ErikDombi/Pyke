@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Pyke.Events.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Pyke.Matchmaking
         public string PlayerResponse;
 
         [JsonProperty("state")]
-        public string State;
+        public ReadyStateState State;
 
         [JsonProperty("suppressUx")]
         public bool SuppressUx;

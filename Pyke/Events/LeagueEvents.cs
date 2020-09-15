@@ -23,12 +23,12 @@ namespace Pyke.Events
 
         //Public Events
         public event EventHandler<State> GameflowStateChanged;
-        public event EventHandler<ReadyState> OnMatchFound;
+        public event EventHandler<ReadyState> OnReadyStateChanged;
         public event EventHandler<Champ> SelectedChampionChanged;
         public event EventHandler<List<Trade>> ChampionTradesUpdated;
         /// <inheritdoc/>
         public event EventHandler<Session> OnSessionUpdated;
-        public event EventHandler<PickType> OnChampSelectTurnToPick;
+        public event EventHandler<SessionActionType> OnChampSelectTurnToPick;
         public event EventHandler<SummonerSelection> OtherSummonerSelectionUpdated;
 
         private bool shouldNotifyPickBan = true;
@@ -58,7 +58,9 @@ namespace Pyke.Events
                 try
                 {
                     leagueAPI.logger.Verbose("Invoked OnMatchFound");
-                    OnMatchFound?.Invoke(s, JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString()));
+                    ReadyState state = JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString());
+                    if(state != null)
+                        OnReadyStateChanged?.Invoke(s, state);
                 }
                 catch (Exception ex)
                 {
@@ -139,7 +141,8 @@ namespace Pyke.Events
         {
             try
             {
-                var SummonerId = leagueAPI.Login.GetSession().SummonerId;
+                var SummonerId = leagueAPI.Login.GetSession()?.SummonerId;
+                if (SummonerId == null) return;
                 var ActorCellId = session.MyTeam.FirstOrDefault(t => t.SummonerId == SummonerId)?.CellId;
                 if (session.Actions.Count == 0)
                     return;
@@ -154,15 +157,15 @@ namespace Pyke.Events
                 }
                 if (Action.IsInProgress)
                 {
-                    PickType type = Enum.Parse<PickType>(Action.Type, true);
-                    if ((shouldNotifyPickBan && type == PickType.Ban) || (shouldNotifyPickSelection && type == PickType.Pick))
+                    SessionActionType type = Action.Type;
+                    if ((shouldNotifyPickBan && type == SessionActionType.Ban) || (shouldNotifyPickSelection && type == SessionActionType.Pick))
                     {
                         leagueAPI.logger.Verbose("Invoked OnChampSelectTurnToPick with type: " + type);
                         OnChampSelectTurnToPick?.Invoke(s, type);
                     }
-                    if (Action.Type == "pick")
+                    if (Action.Type == SessionActionType.Pick)
                         shouldNotifyPickSelection = false;
-                    if (Action.Type == "ban")
+                    if (Action.Type == SessionActionType.Ban)
                         shouldNotifyPickBan = false;
                 }
             }
