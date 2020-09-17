@@ -22,6 +22,7 @@ using Pyke.Gameflow;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Pyke.Lobby;
+using Pyke.Window;
 
 namespace Pyke
 {
@@ -45,6 +46,8 @@ namespace Pyke
         public Summoners.Summoners Summoners { get; }
         public ClientLobby Lobby {get;}
 
+        public WindowHandler WindowHandler { get; }
+
         public Logger logger;
 
         public EventHandler<PykeAPI> PykeReady;
@@ -52,7 +55,7 @@ namespace Pyke
         private int ProcessId;
 
         private Process cProc;
-        private Process wProc => Process.GetProcessesByName("LeagueClientUx")[0];
+        public Process wProc => Process.GetProcessesByName("LeagueClientUx")[0];
         private IntPtr _handle;
 
         public PykeAPI(Serilog.Events.LogEventLevel DebugLevel = Serilog.Events.LogEventLevel.Information)
@@ -93,6 +96,7 @@ namespace Pyke
             ClientInfo = new ClientInformation(this);
             Login = new Login.Login(this);
             Summoners = new Summoners.Summoners(this);
+            WindowHandler = new Window.WindowHandler(this);
             Lobby = new ClientLobby(this);
             Champions = JsonConvert.DeserializeObject<ChampionInfo>(new WebClient().DownloadString("https://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/champion.json"), Converter.Settings).Data.Values.ToList();
             logger.Information("Pyke Ready");

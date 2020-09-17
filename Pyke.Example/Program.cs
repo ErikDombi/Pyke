@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using static Pyke.Events.ILeagueEvents;
+using static Pyke.Window.WindowHandler;
 
 namespace Pyke.Example
 {
@@ -27,7 +28,6 @@ namespace Pyke.Example
             while (true)
             {
                 var url = Console.ReadLine();
-                API.ChampSelect.SelectChampion("Garen", true);
             }
         }
     }
