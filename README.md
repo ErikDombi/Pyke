@@ -18,19 +18,26 @@ This example shows how to hook GameglowState Changes, which we can use to detect
 ```cs
     class Program
     {
-        private static LeagueAPI API;
+        private static PykeAPI API;
         static void Main(string[] args)
         {
-            API = new LeagueAPI().ConnectAsync().GetAwaiter().GetResult();
+            API = new PykeAPI(Serilog.Events.LogEventLevel.Information);
+            API.PykeReady += API_PykeReady;
+            API.ConnectAsync().ConfigureAwait(false);
 
-            API.Events.SubscribeEvent(EventType.GameflowStateChanged);
-            API.Events.GameflowStateChanged += Events_GameflowStateChanged;
-            Console.ReadLine();
+            while (true)
+            {
+                Console.ReadLine();
+            }
         }
 
-        private static void Events_GameflowStateChanged(object sender, State e)
+        private static void API_PykeReady(object sender, PykeAPI e)
         {
-            Console.WriteLine("State Changed: " + e.ToString());
+            API.Events.SubscribeAllEvents();
+            API.Events.GameflowStateChanged += (s, e) => {
+                Console.WriteLine(e.ToString());
+            };
+            Console.WriteLine("Pyke is ready! :)");
         }
     }
  ```

@@ -18,17 +18,23 @@ namespace Pyke.Example
         private static PykeAPI API;
         static void Main(string[] args)
         {
-            API = new PykeAPI(Serilog.Events.LogEventLevel.Information).ConnectAsync().GetAwaiter().GetResult();
+            API = new PykeAPI(Serilog.Events.LogEventLevel.Information);
+            API.PykeReady += API_PykeReady;
+            API.ConnectAsync().ConfigureAwait(false);
 
+            while (true)
+            {
+                Console.ReadLine();
+            }
+        }
+
+        private static void API_PykeReady(object sender, PykeAPI e)
+        {
             API.Events.SubscribeAllEvents();
             API.Events.GameflowStateChanged += (s, e) => {
                 Console.WriteLine(e.ToString());
             };
-
-            while (true)
-            {
-                var url = Console.ReadLine();
-            }
+            Console.WriteLine("Pyke is ready! :)");
         }
     }
 }

@@ -28,24 +28,24 @@ namespace Pyke
 {
     public class PykeAPI : ILeagueClientApi
     {
-        private readonly LeagueProcessHandler _processHandler;
-        private readonly LockFileHandler _lockFileHandler;
+        private LeagueProcessHandler _processHandler;
+        private LockFileHandler _lockFileHandler;
         public event EventHandler Disconnected;
-        public Networking.Http.ILeagueRequestHandler RequestHandler { get; }
-        public Websocket.ILeagueEventHandler EventHandler { get; }
-        public Networking.Http.Endpoints.IRiotClientEndpoint RiotClientEndpoint { get; }
-        public Networking.Http.Endpoints.IProcessControlEndpoint ProcessControlEndpoint { get; }
-        public IChampSelect ChampSelect { get; }
-        public ILeagueEvents Events { get; }
-        public IMatchMaker MatchMaker { get; }
-        public ClientInformation ClientInfo { get; }
-        public ClientGameflow Gameflow { get; }
-        public Login.Login Login { get; }
-        public List<Champ> Champions { get; }
-        public Summoners.Summoners Summoners { get; }
-        public ClientLobby Lobby { get; }
-        public WindowHandler WindowHandler { get; }
-        public Logger logger;
+        public Networking.Http.ILeagueRequestHandler RequestHandler { get; private set; }
+        public Websocket.ILeagueEventHandler EventHandler { get; private set; }
+        public Networking.Http.Endpoints.IRiotClientEndpoint RiotClientEndpoint { get; private set; }
+        public Networking.Http.Endpoints.IProcessControlEndpoint ProcessControlEndpoint { get; private set; }
+        public IChampSelect ChampSelect { get; private set; }
+        public ILeagueEvents Events { get; private set; }
+        public IMatchMaker MatchMaker { get; private set; }
+        public ClientInformation ClientInfo { get; private set; }
+        public ClientGameflow Gameflow { get; private set; }
+        public Login.Login Login { get; private set; }
+        public List<Champ> Champions { get; private set; }
+        public Summoners.Summoners Summoners { get; private set; }
+        public ClientLobby Lobby { get; private set; }
+        public WindowHandler WindowHandler { get; private set; }
+        public Logger logger { get; private set; }
         public event EventHandler<PykeAPI> PykeReady;
         private int ProcessId;
         private Process cProc;
@@ -64,17 +64,14 @@ namespace Pyke
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LeagueAPI"/> class.
+        /// Connects to the league client api.
         /// </summary>
-        /// <param name="port">The league client API's port.</param>
-        /// <param name="token">The authentication token.</param>
-        /// <param name="eventHandler">The event handler.</param>
-        private PykeAPI(int port, string token, Websocket.ILeagueEventHandler eventHandler, LeagueProcessHandler _pHandler, LockFileHandler _lfHandler, Logger logger)
+        /// <returns>A new instance of <see cref="LeagueAPI" /> that's connected to the client api.</returns>
+        public async Task<PykeAPI> ConnectAsync()
         {
-            this.logger = logger;
-            _processHandler = _pHandler;
-            _lockFileHandler = _lfHandler;
-            EventHandler = eventHandler;
+            var (port, token, processId) = await GetAuthCredentialsAsync().ConfigureAwait(false);
+            this.ProcessId = processId;
+            EventHandler = new LeagueEventHandler(port, token);
             RequestHandler = new LeagueRequestHandler(port, token, this);
             RiotClientEndpoint = new RiotClientEndpoint(RequestHandler);
             ProcessControlEndpoint = new ProcessControlEndpoint(RequestHandler);
@@ -93,21 +90,8 @@ namespace Pyke
             WindowHandler = new Window.WindowHandler(this);
             Lobby = new ClientLobby(this);
             Champions = JsonConvert.DeserializeObject<ChampionInfo>(new WebClient().DownloadString("https://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/champion.json"), Converter.Settings).Data.Values.ToList();
-            logger.Information("Pyke Ready");
-            PykeReady?.Invoke(this, this);
-        }
 
-        /// <summary>
-        /// Connects to the league client api.
-        /// </summary>
-        /// <returns>A new instance of <see cref="LeagueAPI" /> that's connected to the client api.</returns>
-        public async Task<PykeAPI> ConnectAsync()
-        {
-            var (port, token, processId) = await GetAuthCredentialsAsync().ConfigureAwait(false);
-            this.ProcessId = processId;
-            var eventHandler = new LeagueEventHandler(port, token);
-            var api = new PykeAPI(port, token, eventHandler, _processHandler, _lockFileHandler, logger);
-            return await EnsureConnectionAsync(api).ConfigureAwait(false);
+            return await EnsureConnectionAsync(this).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -152,6 +136,7 @@ namespace Pyke
                 {
                     await api.RequestHandler.GetResponseAsync<string>(HttpMethod.Get, "/riotclient/app-name").ConfigureAwait(false);
                     await Task.Run(() => api.EventHandler.Connect()).ConfigureAwait(false);
+                    api.PykeReady(api, api);
                     return api;
                 }
                 catch (Exception ex)
