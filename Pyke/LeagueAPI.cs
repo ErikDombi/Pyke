@@ -35,7 +35,6 @@ namespace Pyke
         public Websocket.ILeagueEventHandler EventHandler { get; }
         public Networking.Http.Endpoints.IRiotClientEndpoint RiotClientEndpoint { get; }
         public Networking.Http.Endpoints.IProcessControlEndpoint ProcessControlEndpoint { get; }
-
         public IChampSelect ChampSelect { get; }
         public ILeagueEvents Events { get; }
         public IMatchMaker MatchMaker { get; }
@@ -44,16 +43,11 @@ namespace Pyke
         public Login.Login Login { get; }
         public List<Champ> Champions { get; }
         public Summoners.Summoners Summoners { get; }
-        public ClientLobby Lobby {get;}
-
+        public ClientLobby Lobby { get; }
         public WindowHandler WindowHandler { get; }
-
         public Logger logger;
-
         public EventHandler<PykeAPI> PykeReady;
-
         private int ProcessId;
-
         private Process cProc;
         public Process wProc => Process.GetProcessesByName("LeagueClientUx")[0];
         private IntPtr _handle;
@@ -102,7 +96,6 @@ namespace Pyke
             logger.Information("Pyke Ready");
             PykeReady?.Invoke(this, this);
         }
-
 
         /// <summary>
         /// Connects to the league client api.

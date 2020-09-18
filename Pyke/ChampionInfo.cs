@@ -7,7 +7,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
-    public partial class ChampionInfo
+    public class ChampionInfo
     {
         [JsonProperty("type")]
         public TypeEnum Type { get; set; }
@@ -22,7 +22,7 @@
         public Dictionary<string, Champ> Data { get; set; }
     }
 
-    public partial class Champ
+    public class Champ
     {
         [JsonProperty("version")]
         public Version Version { get; set; }
@@ -59,7 +59,7 @@
         public Dictionary<string, double> Stats { get; set; }
     }
 
-    public partial class Image
+    public class Image
     {
         [JsonProperty("full")]
         public string Full { get; set; }
@@ -83,7 +83,7 @@
         public long H { get; set; }
     }
 
-    public partial class Info
+    public class Info
     {
         [JsonProperty("attack")]
         public long Attack { get; set; }
@@ -98,13 +98,11 @@
         public long Difficulty { get; set; }
     }
 
-    public enum TypeEnum { Champion };
+    public enum TypeEnum { Champion }
 
-    public enum Sprite { Champion0Png, Champion1Png, Champion2Png, Champion3Png, Champion4Png };
+    public enum Sprite { Champion0Png, Champion1Png, Champion2Png, Champion3Png, Champion4Png }
 
-    public enum Tag { Assassin, Fighter, Mage, Marksman, Support, Tank };
-
-    public enum Version { The10161 };
+    public enum Tag { Assassin, Fighter, Mage, Marksman, Support, Tank }
 
     internal static class Converter
     {
@@ -117,7 +115,6 @@
                 TypeEnumConverter.Singleton,
                 SpriteConverter.Singleton,
                 TagConverter.Singleton,
-                VersionConverter.Singleton,
                 new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
             },
         };
@@ -304,39 +301,4 @@
 
         public static readonly TagConverter Singleton = new TagConverter();
     }
-
-    internal class VersionConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(Version) || t == typeof(Version?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "10.16.1")
-            {
-                return Version.The10161;
-            }
-            throw new Exception("Cannot unmarshal type Version");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (Version)untypedValue;
-            if (value == Version.The10161)
-            {
-                serializer.Serialize(writer, "10.16.1");
-                return;
-            }
-            throw new Exception("Cannot marshal type Version");
-        }
-
-        public static readonly VersionConverter Singleton = new VersionConverter();
-    }
 }
-

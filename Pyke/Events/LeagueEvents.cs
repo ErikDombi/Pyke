@@ -59,7 +59,7 @@ namespace Pyke.Events
                 {
                     leagueAPI.logger.Verbose("Invoked OnMatchFound");
                     ReadyState state = JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString());
-                    if(state != null)
+                    if (state != null)
                         OnReadyStateChanged?.Invoke(s, state);
                 }
                 catch (Exception ex)
