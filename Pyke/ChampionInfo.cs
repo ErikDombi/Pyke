@@ -7,7 +7,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
-    public class ChampionInfo
+    public partial class ChampionInfo
     {
         [JsonProperty("type")]
         public TypeEnum Type { get; set; }
@@ -22,7 +22,7 @@
         public Dictionary<string, Champ> Data { get; set; }
     }
 
-    public class Champ
+    public partial class Champ
     {
         [JsonProperty("version")]
         public Version Version { get; set; }
@@ -59,7 +59,7 @@
         public Dictionary<string, double> Stats { get; set; }
     }
 
-    public class Image
+    public partial class Image
     {
         [JsonProperty("full")]
         public string Full { get; set; }
@@ -83,7 +83,7 @@
         public long H { get; set; }
     }
 
-    public class Info
+    public partial class Info
     {
         [JsonProperty("attack")]
         public long Attack { get; set; }
