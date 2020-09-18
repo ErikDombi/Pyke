@@ -1,23 +1,24 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Pyke.ChampSelect.Models
 {// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class Bans
+    public partial class Bans
     {
         [JsonProperty("myTeamBans")]
-        public List<object> MyTeamBans;
+        public List<int> MyTeamBans;
 
         [JsonProperty("numBans")]
         public long NumBans;
 
         [JsonProperty("theirTeamBans")]
-        public List<object> TheirTeamBans;
+        public List<int> TheirTeamBans;
     }
 
-    public class ChatDetails
+    public partial class ChatDetails
     {
         [JsonProperty("chatRoomName")]
         public string ChatRoomName;
@@ -26,16 +27,16 @@ namespace Pyke.ChampSelect.Models
         public string ChatRoomPassword;
     }
 
-    public class EntitledFeatureState
+    public partial class EntitledFeatureState
     {
         [JsonProperty("additionalRerolls")]
         public long AdditionalRerolls;
 
         [JsonProperty("unlockedSkinIds")]
-        public List<object> UnlockedSkinIds;
+        public List<int> UnlockedSkinIds;
     }
 
-    public class Player
+    public partial class Player
     {
         [JsonProperty("assignedPosition")]
         public string AssignedPosition;
@@ -71,7 +72,7 @@ namespace Pyke.ChampSelect.Models
         public long WardSkinId;
     }
 
-    public class Timer
+    public partial class Timer
     {
         [JsonProperty("adjustedTimeLeftInPhase")]
         public long AdjustedTimeLeftInPhase;
@@ -89,7 +90,7 @@ namespace Pyke.ChampSelect.Models
         public long TotalTimeInPhase;
     }
 
-    public class Action
+    public partial class Action
     {
         [JsonProperty("actorCellId")]
         public int ActorCellId;
@@ -106,11 +107,11 @@ namespace Pyke.ChampSelect.Models
         [JsonProperty("pickTurn")]
         public long PickTurn;
         [JsonProperty("type")]
-        public string Type;
-
+        [JsonConverter(typeof(StringEnumConverter))]
+        public SessionActionType Type;
     }
 
-    public class Session
+    public partial class Session
     {
         [JsonProperty("actions")]
         public List<List<Action>> Actions;
@@ -134,7 +135,7 @@ namespace Pyke.ChampSelect.Models
         public Bans Bans;
 
         [JsonProperty("benchChampionIds")]
-        public List<object> BenchChampionIds;
+        public List<int> BenchChampionIds;
 
         [JsonProperty("benchEnabled")]
         public bool BenchEnabled;
@@ -188,8 +189,18 @@ namespace Pyke.ChampSelect.Models
         public Timer Timer;
 
         [JsonProperty("trades")]
-        public List<object> Trades;
+        public List<Events.Models.Trade> Trades;
     }
 
+    public enum SessionTradeState
+    {
+        AVAILABLE, BUSY, INVALID
+    }
 
+    // TODO: Verify these are correct
+    public enum SessionActionType
+    {
+        Pick,
+        Ban
+    }
 }

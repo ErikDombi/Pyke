@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace Pyke.Utility
 {
@@ -11,7 +12,9 @@ namespace Pyke.Utility
     /// </summary>
     internal class LeagueProcessHandler
     {
-        private const string ProcessName = "LeagueClientUx";
+        private string ProcessName => IsLinux ? "LeagueClientUx.exe" : "LeagueClientUx";
+
+        private bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
         /// <summary>
         /// Triggers when the league client is exited.
@@ -34,6 +37,36 @@ namespace Pyke.Utility
         /// <returns>True if the process was found successfully, otherwise false.</returns>
         public bool WaitForProcess()
         {
+            if(IsLinux)
+                return WaitForProcessLinux();
+            else
+                return WaitForProcessWindows();
+        }
+
+        private bool WaitForProcessLinux(){
+            while (true)
+            {
+                var processes = Process.GetProcessesByName(ProcessName);
+                if (processes.Length > 0)
+                {
+                    if (Process != null)
+                        Process.Exited -= OnProcessExited;
+
+                    Process = processes[0];
+                    Process.EnableRaisingEvents = true;
+                    Process.Exited += OnProcessExited;
+
+                    ExecutablePath = Path.GetDirectoryName($"/home/{Environment.UserName}/snap/leagueoflegends/common/.wine/drive_c/Riot Games/League of Legends/");
+                    break;
+                }
+
+                Thread.Sleep(100);
+            }
+
+            return true;
+        }
+
+        private bool WaitForProcessWindows(){
             while (true)
             {
                 var processes = Process.GetProcessesByName(ProcessName);

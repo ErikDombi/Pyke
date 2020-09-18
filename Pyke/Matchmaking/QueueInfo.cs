@@ -21,7 +21,7 @@ namespace Pyke.Matchmaking
         public string BustedLeaverAccessToken;
 
         [JsonProperty("penalizedSummonerIds")]
-        public List<object> PenalizedSummonerIds;
+        public List<int> PenalizedSummonerIds;
 
         [JsonProperty("penaltyTime")]
         public int PenaltyTime;
@@ -39,7 +39,7 @@ namespace Pyke.Matchmaking
         public DodgeData DodgeData;
 
         [JsonProperty("errors")]
-        public List<object> Errors;
+        public List<SearchErrorResource> Errors;
 
         [JsonProperty("estimatedQueueTime")]
         public double EstimatedQueueTime;
@@ -66,5 +66,32 @@ namespace Pyke.Matchmaking
         public int TimeInQueue;
     }
 
+    public class SearchErrorResource
+    {
+        public string errorType;
+        public int id;
+        public string message;
+        public int penalizedSummonerId;
+        public int penaltyTimeRemaining;
+    }
 
+    public enum SearchResourceSearchState
+    {
+        Invalid,
+        AbandonedLowPriorityQueue,
+        Canceled,
+        Searching,
+        Found,
+        Error,
+        ServiceError,
+        ServiceShutdown
+    }
+
+    public enum DodgeDataState
+    {
+        Invalid,
+        PartyDodged,
+        StrangerDodged,
+        TournamentDodged
+    }
 }

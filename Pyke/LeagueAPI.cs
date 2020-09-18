@@ -18,6 +18,11 @@ using Pyke.Networking.Http.Endpoints;
 using System.Runtime.CompilerServices;
 using Serilog;
 using Serilog.Core;
+using Pyke.Gameflow;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Pyke.Lobby;
+using Pyke.Window;
 
 namespace Pyke
 {
@@ -30,17 +35,22 @@ namespace Pyke
         public Websocket.ILeagueEventHandler EventHandler { get; }
         public Networking.Http.Endpoints.IRiotClientEndpoint RiotClientEndpoint { get; }
         public Networking.Http.Endpoints.IProcessControlEndpoint ProcessControlEndpoint { get; }
-
         public IChampSelect ChampSelect { get; }
         public ILeagueEvents Events { get; }
         public IMatchMaker MatchMaker { get; }
         public ClientInformation ClientInfo { get; }
+        public ClientGameflow Gameflow { get; }
         public Login.Login Login { get; }
         public List<Champ> Champions { get; }
-
         public Summoners.Summoners Summoners { get; }
-
+        public ClientLobby Lobby { get; }
+        public WindowHandler WindowHandler { get; }
         public Logger logger;
+        public EventHandler<PykeAPI> PykeReady;
+        private int ProcessId;
+        private Process cProc;
+        public Process wProc => Process.GetProcessesByName("LeagueClientUx")[0];
+        private IntPtr _handle;
 
         public PykeAPI(Serilog.Events.LogEventLevel DebugLevel = Serilog.Events.LogEventLevel.Information)
         {
@@ -69,19 +79,23 @@ namespace Pyke
             RiotClientEndpoint = new RiotClientEndpoint(RequestHandler);
             ProcessControlEndpoint = new ProcessControlEndpoint(RequestHandler);
             _processHandler.Exited += OnDisconnected;
+            cProc = Process.GetProcessById(ProcessId);
 
             _processHandler = new LeagueProcessHandler();
             _lockFileHandler = new LockFileHandler();
             ChampSelect = new ChampSelect.ChampSelect(this);
             Events = new LeagueEvents(this);
+            Gameflow = new ClientGameflow(this);
             MatchMaker = new MatchMaker(this);
             ClientInfo = new ClientInformation(this);
             Login = new Login.Login(this);
             Summoners = new Summoners.Summoners(this);
+            WindowHandler = new Window.WindowHandler(this);
+            Lobby = new ClientLobby(this);
             Champions = JsonConvert.DeserializeObject<ChampionInfo>(new WebClient().DownloadString("https://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/champion.json"), Converter.Settings).Data.Values.ToList();
             logger.Information("Pyke Ready");
+            PykeReady?.Invoke(this, this);
         }
-
 
         /// <summary>
         /// Connects to the league client api.
@@ -89,7 +103,8 @@ namespace Pyke
         /// <returns>A new instance of <see cref="LeagueAPI" /> that's connected to the client api.</returns>
         public async Task<PykeAPI> ConnectAsync()
         {
-            var (port, token) = await GetAuthCredentialsAsync().ConfigureAwait(false);
+            var (port, token, processId) = await GetAuthCredentialsAsync().ConfigureAwait(false);
+            this.ProcessId = processId;
             var eventHandler = new LeagueEventHandler(port, token);
             var api = new PykeAPI(port, token, eventHandler, _processHandler, _lockFileHandler, logger);
             return await EnsureConnectionAsync(api).ConfigureAwait(false);
@@ -98,7 +113,8 @@ namespace Pyke
         /// <inheritdoc />
         public async Task ReconnectAsync()
         {
-            var (port, token) = await GetAuthCredentialsAsync().ConfigureAwait(false);
+            var (port, token, processId) = await GetAuthCredentialsAsync().ConfigureAwait(false);
+            this.ProcessId = processId;
             await Task.Run(() =>
             {
                 RequestHandler.ChangeSettings(port, token);
@@ -117,7 +133,7 @@ namespace Pyke
         /// Gets the league client api authentication credentials.
         /// </summary>
         /// <returns>The port and auth token.</returns>
-        private async Task<(int port, string token)> GetAuthCredentialsAsync()
+        private async Task<(int port, string token, int processId)> GetAuthCredentialsAsync()
         {
             await Task.Run(() => _processHandler.WaitForProcess()).ConfigureAwait(false);
             return await _lockFileHandler.ParseLockFileAsync(_processHandler.ExecutablePath).ConfigureAwait(false);
@@ -155,6 +171,20 @@ namespace Pyke
         {
             await Task.Run(() => EventHandler.Disconnect()).ConfigureAwait(false);
             Disconnected?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Destroy's the League Client window. Client will need to be restarted to appear again.
+        /// </summary>
+        public void HideWindow()
+        {
+            _handle = wProc.MainWindowHandle;
+            ProcessHandler.ShowWindow(wProc.MainWindowHandle, ProcessHandler.WindowShowStyle.Hide);
+        }
+
+        public void ShowWindow()
+        {
+            ProcessHandler.ShowWindow(_handle, ProcessHandler.WindowShowStyle.Show);
         }
     }
 }

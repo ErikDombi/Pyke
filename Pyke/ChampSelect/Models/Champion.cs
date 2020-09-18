@@ -28,7 +28,7 @@ namespace Pyke.ChampSelect.Models
         public int masteryPoints { get; set; }
         public string name { get; set; }
         public bool owned { get; set; }
-        public List<object> positionsFavorited { get; set; }
+        public List<string> positionsFavorited { get; set; }
         public bool rented { get; set; }
         public List<string> roles { get; set; }
         public SelectionStatus selectionStatus { get; set; }
