@@ -46,7 +46,7 @@ namespace Pyke
         public ClientLobby Lobby { get; }
         public WindowHandler WindowHandler { get; }
         public Logger logger;
-        public EventHandler<PykeAPI> PykeReady;
+        public event EventHandler<PykeAPI> PykeReady;
         private int ProcessId;
         private Process cProc;
         public Process wProc => Process.GetProcessesByName("LeagueClientUx")[0];
