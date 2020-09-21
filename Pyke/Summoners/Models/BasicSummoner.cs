@@ -7,6 +7,6 @@ namespace Pyke.Summoners.Models
     public class BasicSummoner
     {
         public int displayName;
-        public long summonerId;
+        public ulong summonerId;
     }
 }

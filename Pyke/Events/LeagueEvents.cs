@@ -9,12 +9,15 @@ using System.Text;
 using static Pyke.Events.ILeagueEvents;
 using System.Threading;
 using Pyke.Matchmaking;
+using Pyke.Lobby.Models.Party;
 
 namespace Pyke.Events
 {
     public class LeagueEvents : ILeagueEvents
     {
         private PykeAPI leagueAPI;
+
+        private JsonSerializerSettings JsonSettings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
 
         // Private Events
         private event EventHandler<LeagueEvent> _GameflowStateChanged;
@@ -23,6 +26,7 @@ namespace Pyke.Events
         private event EventHandler<LeagueEvent> _ChampionTradeRecieved;
         private event EventHandler<LeagueEvent> _OnSessionUpdated;
         private event EventHandler<LeagueEvent> _MatchMakingUpdated;
+        private event EventHandler<LeagueEvent> _PartyUpdated;
 
         //Public Events
         public event EventHandler<State> GameflowStateChanged;
@@ -34,10 +38,11 @@ namespace Pyke.Events
         public event EventHandler<SessionActionType> OnChampSelectTurnToPick;
         public event EventHandler<SummonerSelection> OtherSummonerSelectionUpdated;
         public event EventHandler<QueueInfo> MatchmakingUpdated;
+        public event EventHandler<Party> PartyUpdated;
 
         private bool shouldNotifyPickBan = true;
         private bool shouldNotifyPickSelection = true;
-        private int actionId = 0;
+        private ulong actionId = 0;
 
         private Session oldSession;
 
@@ -49,7 +54,7 @@ namespace Pyke.Events
                 try
                 {
                     var state = StateChanged.ParseState(e.Data.ToString());
-                    leagueAPI.logger.Verbose("Invoked GameflowStateChanged: " + state.ToString());
+                    leagueAPI.logger.Verbose("Invoked GameflowStateChanged: " + state.ToString(), JsonSettings);
                     GameflowStateChanged?.Invoke(s, state);
                 }
                 catch (Exception ex)
@@ -62,7 +67,7 @@ namespace Pyke.Events
                 try
                 {
                     leagueAPI.logger.Verbose("Invoked OnMatchFound");
-                    ReadyState state = JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString());
+                    ReadyState state = JsonConvert.DeserializeObject<ReadyState>(e.Data.ToString(), JsonSettings);
                     if (state != null)
                         OnReadyStateChanged?.Invoke(s, state);
                 }
@@ -90,7 +95,7 @@ namespace Pyke.Events
                 try
                 {
                     leagueAPI.logger.Verbose("Invoked ChampionTradesUpdated");
-                    ChampionTradesUpdated?.Invoke(s, JsonConvert.DeserializeObject<List<Trade>>(e.Data.ToString()));
+                    ChampionTradesUpdated?.Invoke(s, JsonConvert.DeserializeObject<List<Trade>>(e.Data.ToString(), JsonSettings));
                 }
                 catch (Exception ex)
                 {
@@ -101,7 +106,7 @@ namespace Pyke.Events
             {
                 try
                 {
-                    var session = JsonConvert.DeserializeObject<Session>(e.Data.ToString());
+                    var session = JsonConvert.DeserializeObject<Session>(e.Data.ToString(), JsonSettings);
                     leagueAPI.logger.Verbose("Invoked OnSessionUpdated");
                     OnSessionUpdated?.Invoke(s, session);
                     CheckOnChampSelect(s, session);
@@ -120,12 +125,28 @@ namespace Pyke.Events
             {
                 try
                 {
-                    QueueInfo _info = JsonConvert.DeserializeObject<QueueInfo>(e.Data.ToString());
+                    QueueInfo _info = JsonConvert.DeserializeObject<QueueInfo>(e.Data.ToString(), JsonSettings);
                     MatchmakingUpdated?.Invoke(this, _info);
                 }
                 catch (Exception ex)
                 {
                     leagueAPI.logger.Error("An exception occured while invoking MatchMakingUpdated Event.\n" + ex.ToString());
+                }
+            };
+            _PartyUpdated += (s, e) =>
+            {
+                try
+                {
+                    if (e == null)
+                        return;
+                    Party _party = JsonConvert.DeserializeObject<Party>(e.Data.ToString(), JsonSettings);
+                    if(_party == null)
+                        return;
+                    PartyUpdated?.Invoke(this, _party);
+                }
+                catch (Exception ex)
+                {
+                    leagueAPI.logger.Error("An exception occured while invoking PartyUpdated Event.\n" + ex.ToString());
                 }
             };
         }
@@ -142,7 +163,7 @@ namespace Pyke.Events
                 return;
             for(int i = 0; i < currentNewActions.Count; i++)
             {
-                if(JsonConvert.SerializeObject(currentNewActions[i]) != JsonConvert.SerializeObject(currentOldActions[i]))
+                if(JsonConvert.SerializeObject(currentNewActions[i], JsonSettings) != JsonConvert.SerializeObject(currentOldActions[i], JsonSettings))
                 {
                     var action = currentNewActions[i];
                     var players = leagueAPI.ChampSelect.GetRoster();
@@ -217,6 +238,9 @@ namespace Pyke.Events
                 case EventType.MatchmakingUpdated:
                     leagueAPI.EventHandler.Subscribe("/lol-matchmaking/v1/search", _MatchMakingUpdated);
                     break;
+                case EventType.PartyUpdated:
+                    leagueAPI.EventHandler.Subscribe("/lol-lobby/v2/lobby", _PartyUpdated);
+                    break;
             }
         }
 
@@ -244,7 +268,10 @@ namespace Pyke.Events
                     leagueAPI.EventHandler.Unsubscribe("/lol-champ-select/v1/session");
                     break;
                 case EventType.MatchmakingUpdated:
-                    leagueAPI.EventHandler.Unsubscribe("lol-matchmaking/v1/search");
+                    leagueAPI.EventHandler.Unsubscribe("/lol-matchmaking/v1/search");
+                    break;
+                case EventType.PartyUpdated:
+                    leagueAPI.EventHandler.Unsubscribe("/lol-lobby/v2/lobby");
                     break;
             }
         }

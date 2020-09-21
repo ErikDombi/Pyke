@@ -23,7 +23,7 @@ namespace Pyke.ChampSelect.Models
         public string BanIntentSquarePortratPath;
 
         [JsonProperty("cellId")]
-        public long CellId;
+        public ulong CellId;
 
         [JsonProperty("championIconStyle")]
         public string ChampionIconStyle;
@@ -83,13 +83,13 @@ namespace Pyke.ChampSelect.Models
         public bool ShowTrades;
 
         [JsonProperty("skinId")]
-        public long SkinId;
+        public ulong SkinId;
 
         [JsonProperty("skinSplashPath")]
         public string SkinSplashPath;
 
         [JsonProperty("slotId")]
-        public int SlotId;
+        public ulong SlotId;
 
         [JsonProperty("spell1IconPath")]
         public string Spell1IconPath;
@@ -101,9 +101,9 @@ namespace Pyke.ChampSelect.Models
         public string StatusMessageKey;
 
         [JsonProperty("summonerId")]
-        public long SummonerId;
+        public ulong SummonerId;
 
         [JsonProperty("tradeId")]
-        public long TradeId;
+        public ulong TradeId;
     }
 }

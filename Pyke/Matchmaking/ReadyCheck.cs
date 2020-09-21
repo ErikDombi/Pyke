@@ -9,7 +9,7 @@ namespace Pyke.Matchmaking
     public class ReadyCheck
     {
         [JsonProperty("declinerIds")]
-        public List<object> DeclinerIds;
+        public List<ulong> DeclinerIds;
 
         [JsonProperty("dodgeWarning")]
         public string DodgeWarning;

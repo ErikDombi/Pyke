@@ -12,27 +12,27 @@ namespace Pyke.Gameflow.Models
 
         [JsonConverter(typeof(StringEnumConverter))]
         public PlayerStatusCustomSpectatorPolicy customSpectatorPolicy { get; set; }
-        public List<int> invitedSummonerIds { get; set; }
+        public List<ulong> invitedSummonerIds { get; set; }
         public bool isCustom { get; set; }
         public bool isLeader { get; set; }
         public bool isPracticeTool { get; set; }
         public bool isSpectator { get; set; }
         public string lobbyId { get; set; }
-        public List<int> memberSummonerIds { get; set; }
-        public int queueId { get; set; }
+        public List<ulong> memberSummonerIds { get; set; }
+        public ulong queueId { get; set; }
     }
 
     public class LastQueuedLobbyStatus
     {
         public bool allowedPlayAgain { get; set; }
         public string customSpectatorPolicy { get; set; }
-        public List<int> invitedSummonerIds { get; set; }
+        public List<ulong> invitedSummonerIds { get; set; }
         public bool isCustom { get; set; }
         public bool isLeader { get; set; }
         public bool isPracticeTool { get; set; }
         public bool isSpectator { get; set; }
         public string lobbyId { get; set; }
-        public List<int> memberSummonerIds { get; set; }
+        public List<ulong> memberSummonerIds { get; set; }
         public int queueId { get; set; }
     }
 

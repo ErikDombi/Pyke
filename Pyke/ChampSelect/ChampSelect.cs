@@ -44,14 +44,14 @@ namespace Pyke.ChampSelect
 
         public Session GetSession() => GetSessionAsync().GetAwaiter().GetResult();
 
-        public async Task<bool> SetSessionActionAsync(int id, Models.Action action) => (await leagueAPI.RequestHandler.HttpRequest<Models.Action>(
+        public async Task<bool> SetSessionActionAsync(ulong id, Models.Action action) => (await leagueAPI.RequestHandler.HttpRequest<Models.Action>(
                 HttpMethod.Patch,
                 $"/lol-champ-select/v1/session/actions/{id}",
                 null,
                 action
             )).didFail;
 
-        public bool SetSessionAction(int id, Models.Action action) => SetSessionActionAsync(id, action).GetAwaiter().GetResult();
+        public bool SetSessionAction(ulong id, Models.Action action) => SetSessionActionAsync(id, action).GetAwaiter().GetResult();
 
         public async Task<bool> SelectChampionAsync(string ChampionName, bool LockIn)
         {
@@ -71,7 +71,7 @@ namespace Pyke.ChampSelect
                 if (ActorCellId == null) return false;
                 var myActions = Session.Actions.Select(t => t.FirstOrDefault(c => c.ActorCellId == ActorCellId));
                 var Action = myActions?.FirstOrDefault(t => t != null && t.IsInProgress);
-                Action.ChampionId = (int)leagueAPI.Champions.FirstOrDefault(t => t.Key == ChampionId).Key;
+                Action.ChampionId = (ulong)leagueAPI.Champions.FirstOrDefault(t => t.Key == ChampionId).Key;
                 Action.Completed = LockIn;
                 return SetSessionAction(Action.Id, Action);
             }

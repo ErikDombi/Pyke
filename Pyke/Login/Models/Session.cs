@@ -9,7 +9,7 @@ namespace Pyke.Login.Models
     public class Session
     {
         [JsonProperty("accountId")]
-        public int AccountId;
+        public ulong AccountId;
 
         [JsonProperty("connected")]
         public bool Connected;
@@ -37,7 +37,7 @@ namespace Pyke.Login.Models
         public SessionState State;
 
         [JsonProperty("summonerId")]
-        public int SummonerId;
+        public ulong SummonerId;
 
         [JsonProperty("userAuthToken")]
         public string UserAuthToken;

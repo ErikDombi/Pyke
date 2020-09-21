@@ -26,7 +26,7 @@ namespace Pyke.Summoners.Models
     public class Summoner
     {
         [JsonProperty("accountId")]
-        public int AccountId;
+        public ulong AccountId;
 
         [JsonProperty("displayName")]
         public string DisplayName;
@@ -38,7 +38,7 @@ namespace Pyke.Summoners.Models
         public int PercentCompleteForNextLevel;
 
         [JsonProperty("profileIconId")]
-        public int ProfileIconId;
+        public ulong ProfileIconId;
 
         [JsonProperty("puuid")]
         public string Puuid;
@@ -47,7 +47,7 @@ namespace Pyke.Summoners.Models
         public RerollPoints RerollPoints;
 
         [JsonProperty("summonerId")]
-        public int SummonerId;
+        public ulong SummonerId;
 
         [JsonProperty("summonerLevel")]
         public int SummonerLevel;

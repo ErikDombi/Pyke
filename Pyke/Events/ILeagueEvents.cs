@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Pyke.ChampSelect.Models;
 using Pyke.Events.Models;
+using Pyke.Lobby.Models.Party;
 using Pyke.Matchmaking;
 
 namespace Pyke.Events
@@ -20,6 +21,8 @@ namespace Pyke.Events
         public event EventHandler<SessionActionType> OnChampSelectTurnToPick;
 
         public event EventHandler<QueueInfo> MatchmakingUpdated;
+
+        public event EventHandler<Party> PartyUpdated;
 
         /// <summary>
         /// Is invoked when any changes occur during champ select. You should update all champ select data when this is invoked.
@@ -45,7 +48,8 @@ namespace Pyke.Events
             OnSessionUpdated,
             OnChampSelectTurnToPick,
             MatchmakingUpdated,
-            OtherSummonerSelectionUpdated
+            OtherSummonerSelectionUpdated,
+            PartyUpdated
         }
     }
 }

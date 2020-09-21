@@ -33,7 +33,7 @@ namespace Pyke.ChampSelect.Models
         public long AdditionalRerolls;
 
         [JsonProperty("unlockedSkinIds")]
-        public List<int> UnlockedSkinIds;
+        public List<ulong> UnlockedSkinIds;
     }
 
     public partial class Player
@@ -42,10 +42,10 @@ namespace Pyke.ChampSelect.Models
         public string AssignedPosition;
 
         [JsonProperty("cellId")]
-        public long CellId;
+        public ulong CellId;
 
         [JsonProperty("championId")]
-        public long ChampionId;
+        public ulong ChampionId;
 
         [JsonProperty("championPickIntent")]
         public long ChampionPickIntent;
@@ -54,7 +54,7 @@ namespace Pyke.ChampSelect.Models
         public string EntitledFeatureType;
 
         [JsonProperty("selectedSkinId")]
-        public long SelectedSkinId;
+        public ulong SelectedSkinId;
 
         [JsonProperty("spell1Id")]
         public ulong Spell1Id;
@@ -63,7 +63,7 @@ namespace Pyke.ChampSelect.Models
         public ulong Spell2Id;
 
         [JsonProperty("summonerId")]
-        public long SummonerId;
+        public ulong SummonerId;
 
         [JsonProperty("team")]
         public long Team;
@@ -93,13 +93,13 @@ namespace Pyke.ChampSelect.Models
     public partial class Action
     {
         [JsonProperty("actorCellId")]
-        public int ActorCellId;
+        public ulong ActorCellId;
         [JsonProperty("championId")]
-        public long ChampionId;
+        public ulong ChampionId;
         [JsonProperty("completed")]
         public bool Completed;
         [JsonProperty("id")]
-        public int Id;
+        public ulong Id;
         [JsonProperty("isAllyAction")]
         public bool IsAllyAction;
         [JsonProperty("isInProgress")]
@@ -135,7 +135,7 @@ namespace Pyke.ChampSelect.Models
         public Bans Bans;
 
         [JsonProperty("benchChampionIds")]
-        public List<int> BenchChampionIds;
+        public List<ulong> BenchChampionIds;
 
         [JsonProperty("benchEnabled")]
         public bool BenchEnabled;
@@ -168,7 +168,7 @@ namespace Pyke.ChampSelect.Models
         public bool IsSpectating;
 
         [JsonProperty("localPlayerCellId")]
-        public long LocalPlayerCellId;
+        public ulong LocalPlayerCellId;
 
         [JsonProperty("lockedEventIndex")]
         public long LockedEventIndex;

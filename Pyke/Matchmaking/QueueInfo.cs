@@ -9,7 +9,7 @@ namespace Pyke.Matchmaking
     public class DodgeData
     {
         [JsonProperty("dodgerId")]
-        public int DodgerId;
+        public ulong DodgerId;
 
         [JsonProperty("state")]
         public string State;
@@ -21,7 +21,7 @@ namespace Pyke.Matchmaking
         public string BustedLeaverAccessToken;
 
         [JsonProperty("penalizedSummonerIds")]
-        public List<int> PenalizedSummonerIds;
+        public List<ulong> PenalizedSummonerIds;
 
         [JsonProperty("penaltyTime")]
         public double PenaltyTime;
@@ -54,7 +54,7 @@ namespace Pyke.Matchmaking
         public LowPriorityData LowPriorityData;
 
         [JsonProperty("queueId")]
-        public int QueueId;
+        public ulong QueueId;
 
         [JsonProperty("readyCheck")]
         public ReadyCheck ReadyCheck;
@@ -69,9 +69,9 @@ namespace Pyke.Matchmaking
     public class SearchErrorResource
     {
         public string errorType;
-        public int id;
+        public ulong id;
         public string message;
-        public double penalizedSummonerId;
+        public ulong penalizedSummonerId;
         public double penaltyTimeRemaining;
     }
 

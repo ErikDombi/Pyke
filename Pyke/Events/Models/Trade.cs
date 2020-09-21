@@ -11,8 +11,8 @@ namespace Pyke.Events.Models
     {
         // /lol-champ-select/v1/session/trades/{id}
 
-        public int cellId { get; set; }
-        public int id { get; set; }
+        public ulong cellId { get; set; }
+        public ulong id { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public Tradestate state { get; set; }

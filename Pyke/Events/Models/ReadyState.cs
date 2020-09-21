@@ -11,7 +11,7 @@ namespace Pyke.Events.Models
         // /lol-matchmaking/v1/ready-check
 
         [JsonProperty("declinerIds")]
-        public List<int> DeclinerIds { get; set; }
+        public List<ulong> DeclinerIds { get; set; }
 
         [JsonProperty("dodgeWarning")]
         [JsonConverter(typeof(StringEnumConverter))]

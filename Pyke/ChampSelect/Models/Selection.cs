@@ -6,9 +6,9 @@ namespace Pyke.ChampSelect.Models
 {
     public class Selection
     {
-        public long selectedSKinId;
+        public ulong selectedSKinId;
         public ulong spell1Id;
         public ulong spell2Id;
-        public long wardSkinId;
+        public ulong wardSkinId;
     }
 }

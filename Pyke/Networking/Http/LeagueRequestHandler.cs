@@ -82,7 +82,7 @@ namespace Pyke.Networking.Http
             TResponse parsedObject = default(TResponse);
             try
             {
-                parsedObject = JsonConvert.DeserializeObject<TResponse>(content);
+                parsedObject = JsonConvert.DeserializeObject<TResponse>(content, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore});
             }
             catch (Exception ex)
             {

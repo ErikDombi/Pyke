@@ -71,7 +71,7 @@ namespace Pyke.ChampSelect
         /// <param name="id"></param>
         /// <param name="action"></param>
         /// <returns>returns <see cref="bool"/> indicating if was success</returns>
-        Task<bool> SetSessionActionAsync(int id, Models.Action action);
+        Task<bool> SetSessionActionAsync(ulong id, Models.Action action);
 
         /// <summary>
         /// Sets Champ Select Session Action
@@ -79,7 +79,7 @@ namespace Pyke.ChampSelect
         /// <param name="id"></param>
         /// <param name="action"></param>
         /// <returns>returns <see cref="bool"/> indicating if was success</returns>
-        bool SetSessionAction(int id, Models.Action action);
+        bool SetSessionAction(ulong id, Models.Action action);
 
         /// <summary>
         /// Selects a champion in champ select

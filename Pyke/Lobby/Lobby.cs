@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pyke.Lobby.Models.Party;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,5 +22,9 @@ namespace Pyke.Lobby
         public async Task<CustomGame> GetCustomGameByIdAsync(int id) => await pykeAPI.RequestHandler.StandardGet<CustomGame>($"/lol-lobby/v1/custom-games/{id}");
 
         public CustomGame GetCustomGameById(int id) => GetCustomGameByIdAsync(id).GetAwaiter().GetResult();
+
+        public async Task<Party> GetCurrentPartyAsync() => await pykeAPI.RequestHandler.StandardGet<Party>("/lol-lobby/v2/lobby");
+
+        public Party GetCurrentParty() => GetCurrentPartyAsync().GetAwaiter().GetResult();
     }
 }

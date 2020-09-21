@@ -20,13 +20,13 @@ namespace Pyke.Lobby
         public bool HasPassword { get; set; }
 
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public ulong Id { get; set; }
 
         [JsonProperty("lobbyName")]
         public string LobbyName { get; set; }
 
         [JsonProperty("mapId")]
-        public int MapId { get; set; }
+        public ulong MapId { get; set; }
 
         [JsonProperty("maxPlayerSlots")]
         public int MaxPlayerSlots { get; set; }
