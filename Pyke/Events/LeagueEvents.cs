@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static Pyke.Events.ILeagueEvents;
+using System.Threading;
+using Pyke.Matchmaking;
 
 namespace Pyke.Events
 {
@@ -20,6 +22,7 @@ namespace Pyke.Events
         private event EventHandler<LeagueEvent> _SelectedChampionChanged;
         private event EventHandler<LeagueEvent> _ChampionTradeRecieved;
         private event EventHandler<LeagueEvent> _OnSessionUpdated;
+        private event EventHandler<LeagueEvent> _MatchMakingUpdated;
 
         //Public Events
         public event EventHandler<State> GameflowStateChanged;
@@ -30,6 +33,7 @@ namespace Pyke.Events
         public event EventHandler<Session> OnSessionUpdated;
         public event EventHandler<SessionActionType> OnChampSelectTurnToPick;
         public event EventHandler<SummonerSelection> OtherSummonerSelectionUpdated;
+        public event EventHandler<QueueInfo> MatchmakingUpdated;
 
         private bool shouldNotifyPickBan = true;
         private bool shouldNotifyPickSelection = true;
@@ -110,6 +114,18 @@ namespace Pyke.Events
                     leagueAPI.logger.Debug("  ----------------- DEBUG DATA -------------");
                     leagueAPI.logger.Debug(e.Data.ToString());
                     leagueAPI.logger.Debug("----------------- END DEBUG DATA -------------");
+                }
+            };
+            _MatchMakingUpdated += (s, e) =>
+            {
+                try
+                {
+                    QueueInfo _info = JsonConvert.DeserializeObject<QueueInfo>(e.Data.ToString());
+                    MatchmakingUpdated?.Invoke(this, _info);
+                }
+                catch (Exception ex)
+                {
+                    leagueAPI.logger.Error("An exception occured while invoking MatchMakingUpdated Event.\n" + ex.ToString());
                 }
             };
         }
@@ -193,9 +209,13 @@ namespace Pyke.Events
                 case EventType.ChampionTradeRecieved:
                     leagueAPI.EventHandler.Subscribe("/lol-champ-select/v1/session/trades", _ChampionTradeRecieved);
                     break;
-                case EventType.OnChampSelectTurn:
+                case EventType.OnChampSelectTurnToPick:
                 case EventType.OnSessionUpdated:
+                case EventType.OtherSummonerSelectionUpdated:
                     leagueAPI.EventHandler.Subscribe("/lol-champ-select/v1/session", _OnSessionUpdated);
+                    break;
+                case EventType.MatchmakingUpdated:
+                    leagueAPI.EventHandler.Subscribe("/lol-matchmaking/v1/search", _MatchMakingUpdated);
                     break;
             }
         }
@@ -219,8 +239,12 @@ namespace Pyke.Events
                     leagueAPI.EventHandler.Unsubscribe("/lol-champ/select/v1/session/trades");
                     break;
                 case EventType.OnSessionUpdated:
-                case EventType.OnChampSelectTurn:
+                case EventType.OnChampSelectTurnToPick:
+                case EventType.OtherSummonerSelectionUpdated:
                     leagueAPI.EventHandler.Unsubscribe("/lol-champ-select/v1/session");
+                    break;
+                case EventType.MatchmakingUpdated:
+                    leagueAPI.EventHandler.Unsubscribe("lol-matchmaking/v1/search");
                     break;
             }
         }

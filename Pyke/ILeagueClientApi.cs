@@ -45,5 +45,7 @@ namespace Pyke
         /// Disconnect from the league client api.
         /// </summary>
         void Disconnect();
+
+        bool Connected { get; }
     }
 }

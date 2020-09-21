@@ -196,11 +196,12 @@ namespace Pyke.ChampSelect.Models
     {
         AVAILABLE, BUSY, INVALID
     }
-
+     
     // TODO: Verify these are correct
     public enum SessionActionType
     {
         Pick,
-        Ban
+        Ban,
+        phase_transition
     }
 }

@@ -26,7 +26,7 @@ using Pyke.Window;
 
 namespace Pyke
 {
-    public class PykeAPI : ILeagueClientApi
+    public class PykeAPI// : ILeagueClientApi
     {
         private LeagueProcessHandler _processHandler;
         private LockFileHandler _lockFileHandler;
@@ -47,9 +47,11 @@ namespace Pyke
         public WindowHandler WindowHandler { get; private set; }
         public Logger logger { get; private set; }
         public event EventHandler<PykeAPI> PykeReady;
+        public bool Connected = false;
         private int ProcessId;
         private Process cProc;
         public Process wProc => Process.GetProcessesByName("LeagueClientUx")[0];
+
         private IntPtr _handle;
 
         public PykeAPI(Serilog.Events.LogEventLevel DebugLevel = Serilog.Events.LogEventLevel.Information)
@@ -136,7 +138,8 @@ namespace Pyke
                 {
                     await api.RequestHandler.GetResponseAsync<string>(HttpMethod.Get, "/riotclient/app-name").ConfigureAwait(false);
                     await Task.Run(() => api.EventHandler.Connect()).ConfigureAwait(false);
-                    api.PykeReady(api, api);
+                    Connected = true;
+                    api.PykeReady?.Invoke(api, api);
                     return api;
                 }
                 catch (Exception ex)
@@ -155,6 +158,7 @@ namespace Pyke
         private async void OnDisconnected(object sender, EventArgs e)
         {
             await Task.Run(() => EventHandler.Disconnect()).ConfigureAwait(false);
+            Connected = false;
             Disconnected?.Invoke(this, EventArgs.Empty);
         }
 

@@ -25,6 +25,7 @@ namespace Pyke.Example
             while (true)
             {
                 Console.ReadLine();
+                Console.WriteLine(API.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "/lol-champ-select/v1/session", null).GetAwaiter().GetResult());
             }
         }
 

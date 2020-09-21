@@ -24,7 +24,7 @@ namespace Pyke.Matchmaking
         public bool SuppressUx;
 
         [JsonProperty("timer")]
-        public int Timer;
+        public double Timer;
     }
 
 

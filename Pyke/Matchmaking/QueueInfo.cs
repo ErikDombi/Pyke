@@ -24,10 +24,10 @@ namespace Pyke.Matchmaking
         public List<int> PenalizedSummonerIds;
 
         [JsonProperty("penaltyTime")]
-        public int PenaltyTime;
+        public double PenaltyTime;
 
         [JsonProperty("penaltyTimeRemaining")]
-        public int PenaltyTimeRemaining;
+        public double PenaltyTimeRemaining;
 
         [JsonProperty("reason")]
         public string Reason;
@@ -63,7 +63,7 @@ namespace Pyke.Matchmaking
         public string SearchState;
 
         [JsonProperty("timeInQueue")]
-        public int TimeInQueue;
+        public double TimeInQueue;
     }
 
     public class SearchErrorResource
@@ -71,8 +71,8 @@ namespace Pyke.Matchmaking
         public string errorType;
         public int id;
         public string message;
-        public int penalizedSummonerId;
-        public int penaltyTimeRemaining;
+        public double penalizedSummonerId;
+        public double penaltyTimeRemaining;
     }
 
     public enum SearchResourceSearchState
