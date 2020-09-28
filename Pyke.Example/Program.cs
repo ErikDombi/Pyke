@@ -35,7 +35,15 @@ namespace Pyke.Example
             API.Events.GameflowStateChanged += (s, e) => {
                 Console.WriteLine(e.ToString());
             };
+
+            API.Events.OnChampSelectTurnToPick += Events_OnChampSelectTurnToPick;
+
             Console.WriteLine("Pyke is ready! :)");
+        }
+
+        private static void Events_OnChampSelectTurnToPick(object sender, SessionActionType e)
+        {
+
         }
     }
 }
