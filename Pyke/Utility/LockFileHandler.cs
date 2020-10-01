@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Pyke.Utility
@@ -19,25 +20,33 @@ namespace Pyke.Utility
 
         /// <summary>
         /// Waits for the lockfile to be created and then parses it for the token, port, etc.
-        /// </summary>
+        /// </summary>w
         /// <param name="path">The lockfile's path.</param>
         /// <returns>The league client's port and the user's authentication token.</returns>
         public async Task<(int port, string token, int procId)> ParseLockFileAsync(string path)
         {
-            var lockfilePath = await WaitForFileAsync(path).ConfigureAwait(false);
-            using (var fileStream = new FileStream(lockfilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            try
             {
-                using (var reader = new StreamReader(fileStream))
+                var lockfilePath = await WaitForFileAsync(path).ConfigureAwait(false);
+                using (var fileStream = new FileStream(lockfilePath, FileMode.Open, FileAccess.Read))
                 {
-                    var contents = await reader.ReadToEndAsync();
-                    var items = contents.Split(':');
+                    using (var reader = new StreamReader(fileStream))
+                    {
+                        var contents = await reader.ReadToEndAsync();
+                        var items = contents.Split(':');
 
-                    var processId = int.Parse(items[1]);
-                    var port = int.Parse(items[2]);
-                    var token = items[3];
+                        var processId = int.Parse(items[1]);
+                        var port = int.Parse(items[2]);
+                        var token = items[3];
 
-                    return (port, token, processId);
+                        return (port, token, processId);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return (0, null, 0);
             }
         }
 
