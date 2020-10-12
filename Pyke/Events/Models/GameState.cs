@@ -7,7 +7,6 @@ namespace Pyke.Events
 {
     public class StateChanged
     {
-
         public static State ParseState(string State)
         {
             switch (State) {

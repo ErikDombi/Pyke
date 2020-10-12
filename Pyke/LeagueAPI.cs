@@ -91,7 +91,7 @@ namespace Pyke
             Summoners = new Summoners.Summoners(this);
             WindowHandler = new Window.WindowHandler(this);
             Lobby = new ClientLobby(this);
-            Champions = JsonConvert.DeserializeObject<ChampionInfo>(new WebClient().DownloadString("https://ddragon.leagueoflegends.com/cdn/10.16.1/data/en_US/champion.json"), Converter.Settings).Data.Values.ToList();
+            Champions = JsonConvert.DeserializeObject<ChampionInfo>(new WebClient().DownloadString("https://ddragon.leagueoflegends.com/cdn/10.19.1/data/en_US/champion.json"), Converter.Settings).Data.Values.ToList();
 
             return await EnsureConnectionAsync(this).ConfigureAwait(false);
         }
