@@ -16,6 +16,8 @@ namespace Pyke.Utility
 
         private bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
+        private bool IsMac => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
         /// <summary>
         /// Triggers when the league client is exited.
         /// </summary>
@@ -37,8 +39,10 @@ namespace Pyke.Utility
         /// <returns>True if the process was found successfully, otherwise false.</returns>
         public bool WaitForProcess()
         {
-            if(IsLinux)
+            if (IsLinux)
                 return WaitForProcessLinux();
+            else if (IsMac)
+                return WaitForProcessMac();
             else
                 return WaitForProcessWindows();
         }
@@ -57,6 +61,30 @@ namespace Pyke.Utility
                     Process.Exited += OnProcessExited;
 
                     ExecutablePath = Path.GetDirectoryName($"/home/{Environment.UserName}/snap/leagueoflegends/common/.wine/drive_c/Riot Games/League of Legends/");
+                    break;
+                }
+
+                Thread.Sleep(100);
+            }
+
+            return true;
+        }
+
+        private bool WaitForProcessMac()
+        {
+            while (true)
+            {
+                var processes = Process.GetProcessesByName(ProcessName);
+                if (processes.Length > 0)
+                {
+                    if (Process != null)
+                        Process.Exited -= OnProcessExited;
+
+                    Process = processes[0];
+                    Process.EnableRaisingEvents = true;
+                    Process.Exited += OnProcessExited;
+
+                    ExecutablePath = Path.GetDirectoryName($"/Applications/League of Legends.app/Contents/LoL/");
                     break;
                 }
 
