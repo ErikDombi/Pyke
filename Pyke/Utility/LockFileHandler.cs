@@ -28,7 +28,7 @@ namespace Pyke.Utility
             try
             {
                 var lockfilePath = await WaitForFileAsync(path).ConfigureAwait(false);
-                using (var fileStream = new FileStream(lockfilePath, FileMode.Open, FileAccess.Read))
+                using (var fileStream = new FileStream(lockfilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (var reader = new StreamReader(fileStream))
                     {
