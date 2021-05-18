@@ -1,4 +1,4 @@
-﻿namespace Pyke
+namespace Pyke
 {
     using System;
     using System.Collections.Generic;
@@ -100,7 +100,7 @@
 
     public enum TypeEnum { Champion }
 
-    public enum Sprite { Champion0Png, Champion1Png, Champion2Png, Champion3Png, Champion4Png }
+    public enum Sprite { Champion0Png, Champion1Png, Champion2Png, Champion3Png, Champion4Png, Champion5Png }
 
     public enum Tag { Assassin, Fighter, Mage, Marksman, Support, Tank }
 
@@ -174,6 +174,8 @@
                     return Sprite.Champion3Png;
                 case "champion4.png":
                     return Sprite.Champion4Png;
+                case "champion5.png":
+                    return Sprite.Champion5Png;
             }
             throw new Exception("Cannot unmarshal type Sprite");
         }
@@ -202,6 +204,9 @@
                     return;
                 case Sprite.Champion4Png:
                     serializer.Serialize(writer, "champion4.png");
+                    return;
+                case Sprite.Champion5Png:
+                    serializer.Serialize(writer, "champion5.png");
                     return;
             }
             throw new Exception("Cannot marshal type Sprite");
