@@ -41,7 +41,11 @@ namespace Pyke
         public ClientInformation ClientInfo { get; private set; }
         public ClientGameflow Gameflow { get; private set; }
         public Login.Login Login { get; private set; }
-        public List<Champ> Champions { get; private set; }
+        private ChampionInfo ChampInfo { get; set; }
+        public List<Champ> Champions { 
+            get => ChampInfo.Data.Values.ToList(); 
+            set => ChampInfo.Data = value.ToDictionary(x => x.Id); 
+        }
         public Summoners.Summoners Summoners { get; private set; }
         public ClientLobby Lobby { get; private set; }
         public WindowHandler WindowHandler { get; private set; }
@@ -53,6 +57,9 @@ namespace Pyke
         public Process wProc => Process.GetProcessesByName("LeagueClientUx")[0];
 
         private IntPtr _handle;
+
+        private const string DDRAGON_VERSIONS_ENDPOINT = "https://ddragon.leagueoflegends.com/api/versions.json";
+        private string DDRAGON_CHAMPIONS_ENDPOINT(string patch) => $"https://ddragon.leagueoflegends.com/cdn/{patch}/data/en_US/champion.json";
 
         public PykeAPI(Serilog.Events.LogEventLevel DebugLevel = Serilog.Events.LogEventLevel.Information)
         {
@@ -91,9 +98,22 @@ namespace Pyke
             Summoners = new Summoners.Summoners(this);
             WindowHandler = new Window.WindowHandler(this);
             Lobby = new ClientLobby(this);
-            Champions = JsonConvert.DeserializeObject<ChampionInfo>(new WebClient().DownloadString("https://ddragon.leagueoflegends.com/cdn/11.10.1/data/en_US/champion.json"), Converter.Settings).Data.Values.ToList();
+            LoadChampionData();
 
             return await EnsureConnectionAsync(this).ConfigureAwait(false);
+        }
+
+        private void LoadChampionData()
+        {
+            using (WebClient wc = new WebClient())
+            {
+                string[] patches = JsonConvert.DeserializeObject<string[]>(wc.DownloadString(DDRAGON_VERSIONS_ENDPOINT));
+                string latestPatch = patches.First();
+
+                logger.Information("Loading Data From Patch: " + latestPatch);
+
+                ChampInfo = JsonConvert.DeserializeObject<ChampionInfo>(wc.DownloadString(DDRAGON_CHAMPIONS_ENDPOINT(latestPatch)), Converter.Settings);
+            }
         }
 
         /// <inheritdoc />
